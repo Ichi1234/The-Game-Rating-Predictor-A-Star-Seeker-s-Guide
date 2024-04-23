@@ -19,16 +19,17 @@ class View:
         self.app = App()
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit}
-        self.current_menu = Login(self.app)
-        self.current_menu.grid(sticky="nsew")
+        self.current_menu = None
         self.app.columnconfigure(0, weight=1)
         self.app.rowconfigure(0, weight=1)
 
     def switch_menu(self, menu_name):
         """This method use for switching menu"""
-        pass
+        self.current_menu = self.menu[menu_name](self.app)
+        self.current_menu.grid(sticky="nsew")
 
     def main_loop(self):
+        """Loop"""
         self.app.mainloop()
 
 
@@ -73,10 +74,12 @@ class Login(tk.CTkFrame):
 
         # Signup and Sign in Button
         signup_button = tk.CTkButton(self.__data_frame, text="Sign Up", height=30)
-        signup_button.grid(row=3, column=0, sticky="n")
         login_button = tk.CTkButton(self.__data_frame, text="Sign In", height=30)
+        signup_button.grid(row=3, column=0, sticky="n")
         login_button.grid(row=3, column=1, sticky="n")
 
+        # Bind Button
+        signup_button.bind("<Button>", controller.signup)
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
@@ -105,6 +108,7 @@ class GameData(tk.CTkFrame):
     """class for Game Data menu"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        pass
 
 
 class StatisticData(tk.CTkFrame):
