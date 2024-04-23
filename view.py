@@ -12,9 +12,8 @@ class App(tk.CTk):
         tk.set_appearance_mode("dark")
 
 
-
 class View:
-    """This is view"""
+    """This class is responsible for presenting the data to the user."""
 
     def __init__(self):
         self.app = App()
@@ -40,49 +39,66 @@ class Login(tk.CTkFrame):
         super().__init__(*args, **kwargs)
         self.columnconfigure(0, weight=2)
         self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.font = ("Arial", 16)
 
-        left_frame = tk.CTkFrame(master=self, fg_color="dark blue")
-        left_frame.grid(row=0, column=0, sticky="news")
-        left_frame.columnconfigure(0, weight=1)
+        self.__left_frame = tk.CTkFrame(master=self, fg_color="dark blue")
+        self.__announce = tk.CTkScrollableFrame(master=self.__left_frame)
+        self.__data_frame = tk.CTkFrame(master=self, fg_color="#808080")
 
-        anoucement = tk.CTkScrollableFrame(master=left_frame)
-        anoucement.grid(row=0, column=0, sticky="news", padx=50, pady=50, rowspan=4)
+        self.init_components()
+        self.announcement_text()
 
-        label2 = tk.CTkLabel(anoucement, text="Announcement", font=("Arial", 16))
-        label2.grid(row=0, column=0)
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
 
-        data_frame = tk.CTkFrame(master=self, fg_color="#808080")
-        data_frame.grid(row=0, column=1, sticky="news", columnspan=2, rowspan=4)
-        data_frame.columnconfigure((0, 1), weight=1)
-        data_frame.rowconfigure((0, 1, 2), weight=2)
-        data_frame.rowconfigure(3, weight=1)
-        data_frame.rowconfigure(4, weight=4)
-
-
-
+        # Logo
         logo = tk.CTkImage(light_image=Image.open("img/logo.png"), size=(150, 150))
-        logo_label = tk.CTkLabel(data_frame, image=logo, text="")
+        logo_label = tk.CTkLabel(self.__data_frame, image=logo, text="")
         logo_label.grid(row=0, column=0, sticky="nwe", columnspan=3)
 
-        user_label = tk.CTkLabel(data_frame, text="Username", font=("Arial", 16))
+        # Username Label and Entry
+        user_label = tk.CTkLabel(self.__data_frame, text="Username", font=self.font)
         user_label.grid(row=0, column=0, sticky="sw", padx=15)
-
-        user_entry = tk.CTkEntry(data_frame, placeholder_text="Type your username....", font=("Arial", 16), width=200)
+        user_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your username....", font=self.font,
+                                 width=200)
         user_entry.grid(row=1, column=0, sticky="new", padx=15, columnspan=3)
 
-        pass_label = tk.CTkLabel(data_frame, text="Password", font=("Arial", 16))
+        # Password Label and Entry
+        pass_label = tk.CTkLabel(self.__data_frame, text="Password", font=self.font)
         pass_label.grid(row=1, column=0, sticky="sw", padx=15)
-
-        pass_entry = tk.CTkEntry(data_frame, placeholder_text="Type your password....", font=("Arial", 16), width=200)
+        pass_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your password....", font=self.font,
+                                 width=200)
         pass_entry.grid(row=2, column=0, sticky="new", padx=15, columnspan=3)
 
-        signup_button = tk.CTkButton(data_frame, text="Sign Up", height=30)
+        # Signup and Sign in Button
+        signup_button = tk.CTkButton(self.__data_frame, text="Sign Up", height=30)
         signup_button.grid(row=3, column=0, sticky="n")
-
-        login_button = tk.CTkButton(data_frame, text="Sign In", height=30)
+        login_button = tk.CTkButton(self.__data_frame, text="Sign In", height=30)
         login_button.grid(row=3, column=1, sticky="n")
-    def init_components(self) -> None:
-        pass
+
+        # Left Frame grid and configure
+        self.__left_frame.grid(row=0, column=0, sticky="news")
+        self.__left_frame.columnconfigure(0, weight=1)
+        self.__left_frame.rowconfigure(0, weight=1)
+
+        # Announcement grid
+        self.__announce.grid(row=0, column=0, sticky="news", padx=50, pady=50, rowspan=4)
+
+        # Data Frame grid and configure
+        self.__data_frame.grid(row=0, column=1, sticky="news", columnspan=2, rowspan=4)
+
+        for col_index in range(2):
+            self.__data_frame.columnconfigure(col_index, weight=1)
+
+        for row_index in range(4):
+            self.__data_frame.rowconfigure(row_index, weight=1)
+        self.__data_frame.rowconfigure(4, weight=2)
+
+    def announcement_text(self) -> None:
+        """This method use for insert text to announce"""
+        title = tk.CTkLabel(self.__announce, text="Announcement", font=("Arial", 20))
+        title.grid(row=0, column=0)
 
 
 class GameData(tk.CTkFrame):
@@ -106,5 +122,5 @@ class Credit(tk.CTkFrame):
 
 
 if __name__ == "__main__":
-    app =View()
+    app = View()
     app.main_loop()
