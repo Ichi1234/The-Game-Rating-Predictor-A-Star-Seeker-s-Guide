@@ -1,4 +1,4 @@
-from view import App
+from view import View
 
-app = App()
-app.mainloop()
+app = View()
+app.loop()
