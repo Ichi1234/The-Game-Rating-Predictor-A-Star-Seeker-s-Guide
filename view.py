@@ -103,7 +103,8 @@ class Login(tk.CTkFrame):
 
 class GameData(tk.CTkFrame):
     """class for Game Data menu"""
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class StatisticData(tk.CTkFrame):
