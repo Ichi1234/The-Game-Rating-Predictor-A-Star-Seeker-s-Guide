@@ -15,8 +15,9 @@ class App(tk.CTk):
 class View:
     """This class is responsible for presenting the data to the user."""
 
-    def __init__(self):
+    def __init__(self, controller):
         self.app = App()
+        self.controller = controller
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit}
         self.current_menu = None
@@ -25,7 +26,7 @@ class View:
 
     def switch_menu(self, menu_name):
         """This method use for switching menu"""
-        self.current_menu = self.menu[menu_name](self.app)
+        self.current_menu = self.menu[menu_name](self.app, self.controller)
         self.current_menu.grid(sticky="nsew")
 
     def main_loop(self):
@@ -36,12 +37,13 @@ class View:
 class Login(tk.CTkFrame):
     """class for sign in/sign up menu"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
         self.columnconfigure(0, weight=2)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
         self.font = ("Arial", 16)
+        self.controller = controller
 
         self.__left_frame = tk.CTkFrame(master=self, fg_color="dark blue")
         self.__announce = tk.CTkScrollableFrame(master=self.__left_frame)
@@ -79,7 +81,7 @@ class Login(tk.CTkFrame):
         login_button.grid(row=3, column=1, sticky="n")
 
         # Bind Button
-        signup_button.bind("<Button>", controller.signup)
+        signup_button.bind("<Button>", self.controller.signup)
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
