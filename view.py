@@ -51,7 +51,8 @@ class Login(tk.CTkFrame):
 
         self.init_components()
         self.announcement_text()
-
+    def test(self, event):
+        print("aaa")
     def init_components(self) -> None:
         """Create components and layout the UI."""
 
@@ -81,7 +82,7 @@ class Login(tk.CTkFrame):
         login_button.grid(row=3, column=1, sticky="n")
 
         # Bind Button
-        signup_button.bind("<Button>", self.controller.signup)
+        signup_button.bind("<Button-1>", self.controller.signup)
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
