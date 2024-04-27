@@ -1,6 +1,8 @@
 from PIL import Image
 import customtkinter as tk
+
 FONT = ("Arial", 16)
+
 
 class App(tk.CTk):
     """This class use for initialize the program"""
@@ -22,34 +24,38 @@ class View:
                      "forum": Forum, "credit": Credit}
         self.current_menu = None
         self.menu_label = None
+        self.title_label = None
 
         self.app.columnconfigure(0, weight=1)
         self.app.rowconfigure(0, weight=1)
-        self.app.rowconfigure(1, weight=2, minsize=500)
-
-
 
     def switch_menu(self, menu_name):
         """This method use for switching menu"""
 
         if menu_name not in ["login"] and not self.menu_label:
-            self.menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
-            self.menu_label.grid(row=0, sticky="news")
-            label1 = tk.CTkButton(self.menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
-            label1.pack(side="left")
-
-            label2 = tk.CTkLabel(self.menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
-            label2.pack(side="left", padx=220, pady=3)
-
-            checkbox = tk.CTkSwitch(master=self.menu_label, text="Light Mode", font=("Arial", 16))
-            checkbox.pack(side="left")
-
-
+            self.menu_bar_creation()
 
         self.current_menu = self.menu[menu_name](self.app, self.controller)
-        self.current_menu.grid(row=1, sticky="news", rowspan=2)
 
+        # if it login menu it will grid at the top elif it will grid at 1 because of menu_bar
+        if isinstance(self.current_menu, Login):
+            self.current_menu.grid(row=0, sticky="news", rowspan=2)
+        else:
+            self.app.rowconfigure(1, weight=2, minsize=500)
+            self.current_menu.grid(row=1, sticky="news", rowspan=2)
 
+    def menu_bar_creation(self):
+        self.menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
+        self.menu_label.grid(row=0, sticky="news")
+
+        menu_open = tk.CTkButton(self.menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
+        menu_open.pack(side="left")
+
+        self.title_label = tk.CTkLabel(self.menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
+        self.title_label.pack(side="left", padx=220, pady=3)
+
+        checkbox = tk.CTkSwitch(master=self.menu_label, text="Light Mode", font=("Arial", 16))
+        checkbox.pack(side="left")
 
     def main_loop(self):
         """Loop"""
@@ -130,6 +136,7 @@ class Login(tk.CTkFrame):
 
 class GameData(tk.CTkFrame):
     """class for Game Data menu"""
+
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.menu_frame = tk.CTkFrame(master=self, fg_color="dark blue")
@@ -140,18 +147,16 @@ class GameData(tk.CTkFrame):
         self.rowconfigure(1, weight=1)
         self.rowconfigure(2, weight=1)
 
-
         self.search_box = tk.CTkComboBox(self)
 
         self.init_components()
+
     def init_components(self) -> None:
         """Create components and layout the UI."""
         search_label = tk.CTkLabel(self, text="Find Game by Title", font=("Arial", 22))
         search_label.grid(row=0, column=1, sticky="nw")
         # search_label.configure(text="UwU")
         self.search_box.grid(row=0, column=1, sticky="w")
-
-
 
 
 class StatisticData(tk.CTkFrame):
