@@ -49,13 +49,13 @@ class View:
         self.menu_label.grid(row=0, sticky="news")
 
         menu_open = tk.CTkButton(self.menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
-        menu_open.pack(side="left")
+        menu_open.pack(side="left", expand=True)
 
         self.title_label = tk.CTkLabel(self.menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
-        self.title_label.pack(side="left", padx=220, pady=3)
+        self.title_label.pack(side="left", padx=220, pady=3, expand=True)
 
         checkbox = tk.CTkSwitch(master=self.menu_label, text="Light Mode", font=("Arial", 16))
-        checkbox.pack(side="left")
+        checkbox.pack(side="left", expand=True)
 
     def main_loop(self):
         """Loop"""
@@ -139,24 +139,70 @@ class GameData(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.menu_frame = tk.CTkFrame(master=self, fg_color="dark blue")
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=1)
-        self.columnconfigure(2, weight=1)
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
-        self.rowconfigure(2, weight=1)
+        self.configure(fg_color="#202020")  # TODO light mode - dark mode
 
-        self.search_box = tk.CTkComboBox(self)
+        # String variable for display value
+        self.game_title = "Dark Souls"
+        self.summary_text = "WOAHHHH THIS GAME IS SO GOOOOOD"
+        self.rating = ""
+        self.genre = ""
+        self.platform = ""
+
+        self.columnconfigure(0, weight=2, minsize=20)
+        for i in range(4):
+            self.columnconfigure(i + 1, weight=1)
+        self.columnconfigure(5, weight=2, minsize=20)
+
+        for i in range(4):
+            self.rowconfigure(i, weight=1)
+
+        self.rowconfigure(4, weight=2, minsize=40)
+
+        self.data_frame = tk.CTkFrame(master=self, fg_color="#2d2d2d")
 
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
         search_label = tk.CTkLabel(self, text="Find Game by Title", font=("Arial", 22))
-        search_label.grid(row=0, column=1, sticky="nw")
-        # search_label.configure(text="UwU")
-        self.search_box.grid(row=0, column=1, sticky="w")
+        search_label.grid(row=0, column=1, sticky="ws", pady=20)
+
+        # The title of summary part.
+        summary_label = tk.CTkLabel(self, text="Description of The game", font=("Arial", 22))
+        summary_label.grid(row=2, column=1, sticky="nw")
+
+        # The summary of gameplay or story
+        summary = tk.CTkLabel(self, text="Description of The game", font=FONT)
+        summary.grid(row=2, column=1, sticky="w")
+
+        # Use for search the game
+        search_box = tk.CTkComboBox(self)
+        search_box.grid(row=1, column=1, sticky="new")
+
+        # Title of the current game
+        game_title = tk.CTkLabel(self, text=f"{self.game_title}: Datas", font=("Arial", 22))
+        game_title.grid(row=0, column=3, sticky="wes", columnspan=3, pady=20)
+
+        # Dataframe for shows values of that game
+        self.data_frame.grid(row=1, column=3, sticky="news", rowspan=3, columnspan=3, padx=50)
+        self.data_frame.rowconfigure((0,1,2,3,4), weight=1)
+
+        # Data in dataframe
+        option = {"sticky": "nw", "padx": 10, "pady": 10}
+        player = tk.CTkLabel(self.data_frame, text=f"Totals Players: {self.rating}", font=FONT)
+        player.grid(row=0, column=0, **option)
+
+        rating = tk.CTkLabel(self.data_frame, text=f"Rating: {self.rating}", font=FONT)
+        rating.grid(row=1, column=0, **option)
+
+        genres = tk.CTkLabel(self.data_frame, text=f"Genres: {self.genre}", font=FONT)
+        genres.grid(row=2, column=0, **option)
+
+        platform = tk.CTkLabel(self.data_frame, text=f"Platforms: {self.platform}", font=FONT)
+        platform.grid(row=3, column=0, **option)
+
+
+
 
 
 class StatisticData(tk.CTkFrame):
