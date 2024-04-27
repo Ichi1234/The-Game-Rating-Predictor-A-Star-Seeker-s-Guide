@@ -12,9 +12,11 @@ class Controller:
         self.view.main_loop()
 
     def signin(self, event):
-        pass
+        """This method use for login button in Login class"""
+        self.view.switch_menu("game")
 
     def signup(self, event):
+        """This method use for signup button in Login class"""
         print("UwU")
 
 

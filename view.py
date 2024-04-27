@@ -1,6 +1,6 @@
 from PIL import Image
 import customtkinter as tk
-
+FONT = ("Arial", 16)
 
 class App(tk.CTk):
     """This class use for initialize the program"""
@@ -21,13 +21,35 @@ class View:
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit}
         self.current_menu = None
+        self.menu_label = None
+
         self.app.columnconfigure(0, weight=1)
         self.app.rowconfigure(0, weight=1)
+        self.app.rowconfigure(1, weight=2, minsize=500)
+
+
 
     def switch_menu(self, menu_name):
         """This method use for switching menu"""
+
+        if menu_name not in ["login"] and not self.menu_label:
+            self.menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
+            self.menu_label.grid(row=0, sticky="news")
+            label1 = tk.CTkButton(self.menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
+            label1.pack(side="left")
+
+            label2 = tk.CTkLabel(self.menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
+            label2.pack(side="left", padx=220, pady=3)
+
+            checkbox = tk.CTkSwitch(master=self.menu_label, text="Light Mode", font=("Arial", 16))
+            checkbox.pack(side="left")
+
+
+
         self.current_menu = self.menu[menu_name](self.app, self.controller)
-        self.current_menu.grid(sticky="nsew")
+        self.current_menu.grid(row=1, sticky="news", rowspan=2)
+
+
 
     def main_loop(self):
         """Loop"""
@@ -42,7 +64,6 @@ class Login(tk.CTkFrame):
         self.columnconfigure(0, weight=2)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
-        self.font = ("Arial", 16)
         self.controller = controller
 
         self.__left_frame = tk.CTkFrame(master=self, fg_color="dark blue")
@@ -51,8 +72,7 @@ class Login(tk.CTkFrame):
 
         self.init_components()
         self.announcement_text()
-    def test(self, event):
-        print("aaa")
+
     def init_components(self) -> None:
         """Create components and layout the UI."""
 
@@ -62,16 +82,16 @@ class Login(tk.CTkFrame):
         logo_label.grid(row=0, column=0, sticky="nwe", columnspan=3)
 
         # Username Label and Entry
-        user_label = tk.CTkLabel(self.__data_frame, text="Username", font=self.font)
+        user_label = tk.CTkLabel(self.__data_frame, text="Username", font=FONT)
         user_label.grid(row=0, column=0, sticky="sw", padx=15)
-        user_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your username....", font=self.font,
+        user_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your username....", font=FONT,
                                  width=200)
         user_entry.grid(row=1, column=0, sticky="new", padx=15, columnspan=3)
 
         # Password Label and Entry
-        pass_label = tk.CTkLabel(self.__data_frame, text="Password", font=self.font)
+        pass_label = tk.CTkLabel(self.__data_frame, text="Password", font=FONT)
         pass_label.grid(row=1, column=0, sticky="sw", padx=15)
-        pass_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your password....", font=self.font,
+        pass_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your password....", font=FONT,
                                  width=200)
         pass_entry.grid(row=2, column=0, sticky="new", padx=15, columnspan=3)
 
@@ -83,6 +103,7 @@ class Login(tk.CTkFrame):
 
         # Bind Button
         signup_button.bind("<Button-1>", self.controller.signup)
+        login_button.bind("<Button-1>", self.controller.signin)
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
@@ -109,9 +130,28 @@ class Login(tk.CTkFrame):
 
 class GameData(tk.CTkFrame):
     """class for Game Data menu"""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        pass
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.menu_frame = tk.CTkFrame(master=self, fg_color="dark blue")
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+
+
+        self.search_box = tk.CTkComboBox(self)
+
+        self.init_components()
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        search_label = tk.CTkLabel(self, text="Find Game by Title", font=("Arial", 22))
+        search_label.grid(row=0, column=1, sticky="nw")
+        # search_label.configure(text="UwU")
+        self.search_box.grid(row=0, column=1, sticky="w")
+
+
 
 
 class StatisticData(tk.CTkFrame):
@@ -130,5 +170,6 @@ class Credit(tk.CTkFrame):
 
 
 if __name__ == "__main__":
-    app = View()
+    app = View("a")
+    app.switch_menu("game")
     app.main_loop()
