@@ -6,7 +6,6 @@ FONT = ("Arial", 16)
 
 class App(tk.CTk):
     """This class use for initialize the program"""
-
     def __init__(self):
         super().__init__()
         self.title("The Game Rating Predictor: A Star Seeker's Guide")
@@ -18,22 +17,21 @@ class View:
     """This class is responsible for presenting the data to the user."""
     def __init__(self):
         self.app = App()
-        # self.controller = controller
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "menu": MenuBar}
 
         self.current_menu = None
-        self.menu_label = None
+        self.menu_open = None
         self.menu_bar = None
         self.title_label = None
 
         self.app.columnconfigure(0, weight=1)
         self.app.rowconfigure(0, weight=1)
 
-    def switch_menu(self, menu_name, controller):
+    def switch_menu(self, menu_name, controller=None):
         """This method use for switching menu"""
 
-        if menu_name not in ["login"] and not self.menu_label:
+        if menu_name not in ["login"] and not self.menu_open:
             self.menu_title_creation()
 
         self.current_menu = self.menu[menu_name](self.app, controller)
@@ -46,16 +44,16 @@ class View:
             self.current_menu.grid(row=1, sticky="news", rowspan=2)
 
     def menu_title_creation(self):
-        self.menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
-        self.menu_label.grid(row=0, sticky="news")
+        menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
+        menu_label.grid(row=0, sticky="news")
 
-        menu_open = tk.CTkButton(self.menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
-        menu_open.pack(side="left", expand=True)
+        self.menu_open = tk.CTkButton(menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
+        self.menu_open.pack(side="left", expand=True)
 
-        self.title_label = tk.CTkLabel(self.menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
+        self.title_label = tk.CTkLabel(menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
         self.title_label.pack(side="left", padx=220, pady=3, expand=True)
 
-        checkbox = tk.CTkSwitch(master=self.menu_label, text="Light Mode", font=("Arial", 16))
+        checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=("Arial", 16))
         checkbox.pack(side="left", expand=True)
 
     def main_loop(self):
@@ -222,6 +220,7 @@ class MenuBar(tk.CTkFrame):
     """this class is for menu select screen"""
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
+        self.controller = controller
         self.init_components()
 
     def init_components(self) -> None:
@@ -241,6 +240,11 @@ class MenuBar(tk.CTkFrame):
         credit_button = tk.CTkButton(self, text="About Us")
         credit_button.grid(column=2, row=1)
 
+        # Bind Button
+        game_button.bind("<Button-1>", self.controller.menu_button("game"))
+        stat_button.bind("<Button-1>", self.controller.menu_button("stat"))
+        forum_button.bind("<Button-1>", self.controller.menu_button("forum"))
+        credit_button.bind("<Button-1>", self.controller.menu_button("credit"))
 
 
 if __name__ == "__main__":
