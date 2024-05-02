@@ -16,9 +16,9 @@ class App(tk.CTk):
 
 class View:
     """This class is responsible for presenting the data to the user."""
-    def __init__(self, controller):
+    def __init__(self):
         self.app = App()
-        self.controller = controller
+        # self.controller = controller
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "menu": MenuBar}
 
@@ -30,13 +30,13 @@ class View:
         self.app.columnconfigure(0, weight=1)
         self.app.rowconfigure(0, weight=1)
 
-    def switch_menu(self, menu_name):
+    def switch_menu(self, menu_name, controller):
         """This method use for switching menu"""
 
         if menu_name not in ["login"] and not self.menu_label:
             self.menu_title_creation()
 
-        self.current_menu = self.menu[menu_name](self.app, self.controller)
+        self.current_menu = self.menu[menu_name](self.app, controller)
 
         # if it login menu it will grid at the top elif it will grid at 1 because of menu_bar
         if isinstance(self.current_menu, Login):
