@@ -16,14 +16,15 @@ class App(tk.CTk):
 
 class View:
     """This class is responsible for presenting the data to the user."""
-
     def __init__(self, controller):
         self.app = App()
         self.controller = controller
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
-                     "forum": Forum, "credit": Credit}
+                     "forum": Forum, "credit": Credit, "menu": MenuBar}
+
         self.current_menu = None
         self.menu_label = None
+        self.menu_bar = None
         self.title_label = None
 
         self.app.columnconfigure(0, weight=1)
@@ -33,7 +34,7 @@ class View:
         """This method use for switching menu"""
 
         if menu_name not in ["login"] and not self.menu_label:
-            self.menu_bar_creation()
+            self.menu_title_creation()
 
         self.current_menu = self.menu[menu_name](self.app, self.controller)
 
@@ -44,7 +45,7 @@ class View:
             self.app.rowconfigure(1, weight=2, minsize=500)
             self.current_menu.grid(row=1, sticky="news", rowspan=2)
 
-    def menu_bar_creation(self):
+    def menu_title_creation(self):
         self.menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
         self.menu_label.grid(row=0, sticky="news")
 
@@ -136,7 +137,6 @@ class Login(tk.CTkFrame):
 
 class GameData(tk.CTkFrame):
     """class for Game Data menu"""
-
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.configure(fg_color="#202020")  # TODO light mode - dark mode
@@ -185,7 +185,8 @@ class GameData(tk.CTkFrame):
 
         # Dataframe for shows values of that game
         self.data_frame.grid(row=1, column=3, sticky="news", rowspan=3, columnspan=3, padx=50)
-        self.data_frame.rowconfigure((0,1,2,3,4), weight=1)
+        for i in range(5):
+            self.data_frame.rowconfigure(i, weight=1)
 
         # Data in dataframe
         option = {"sticky": "nw", "padx": 10, "pady": 10}
@@ -200,9 +201,6 @@ class GameData(tk.CTkFrame):
 
         platform = tk.CTkLabel(self.data_frame, text=f"Platforms: {self.platform}", font=FONT)
         platform.grid(row=3, column=0, **option)
-
-
-
 
 
 class StatisticData(tk.CTkFrame):
@@ -220,7 +218,32 @@ class Credit(tk.CTkFrame):
     pass
 
 
+class MenuBar(tk.CTkFrame):
+    """this class is for menu select screen"""
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        self.columnconfigure((0,1,2,3), weight=1)
+        self.rowconfigure((0,1,2,3), weight=1)
+
+        game_button = tk.CTkButton(self, text="Game Data")
+        game_button.grid(column=1, row=1)
+
+        stat_button = tk.CTkButton(self, text="Statistic Data")
+        stat_button.grid(column=2, row=2)
+
+        forum_button = tk.CTkButton(self, text="Forum")
+        forum_button.grid(column=1, row=2)
+
+        credit_button = tk.CTkButton(self, text="About Us")
+        credit_button.grid(column=2, row=1)
+
+
+
 if __name__ == "__main__":
     app = View("a")
-    app.switch_menu("game")
+    app.switch_menu("menu")
     app.main_loop()
