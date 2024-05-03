@@ -3,6 +3,7 @@ from controller import Controller
 import customtkinter as tk
 
 FONT = ("Arial", 16)
+FRAME_COLOR = "#202020"
 
 
 class App(tk.CTk):
@@ -146,7 +147,7 @@ class GameData(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.configure(fg_color="#202020")  # TODO light mode - dark mode
+        self.configure(fg_color=FRAME_COLOR)  # TODO light mode - dark mode
         self.title = "Game Data"
 
         # String variable for display value
@@ -217,11 +218,45 @@ class StatisticData(tk.CTkFrame):
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title = "Statistic Data"
+        self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
+        for i in range(5):
+            self.rowconfigure(i, weight=1)
+        for i in range(2):
+            self.columnconfigure(i, weight=1)
+
+        # Logo
+        distribute_image = tk.CTkImage(light_image=Image.open("img/dis.png"), size=(200, 200))
+        storytelling_image = tk.CTkImage(light_image=Image.open("img/scat.png"), size=(200, 200))
+
+        story_button = tk.CTkButton(self, text="", image=storytelling_image, fg_color="transparent")
+        story_button.grid(row=2, column=0)
+
+        left_label = tk.CTkLabel(self, text="Game Rating Prediction", font=('Arial', 18, 'bold'))
+        left_label.grid(row=3, column=0, sticky="n")
+
+        distribution_button = tk.CTkButton(self, text="", image=distribute_image, fg_color="transparent")
+        distribution_button.grid(row=2, column=1)
+
+        right_label = tk.CTkLabel(self, text="Distribution", font=('Arial', 18, 'bold'))
+        right_label.grid(row=3, column=1, sticky="n")
+
+
+class StoryTelling(tk.CTkFrame):
+    """This class is use for Data story telling"""
+
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.title = "Game Rating Prediction"
+        self.configure(fg_color=FRAME_COLOR)
+        self.controller = controller
+        self.init_components()
+
+    def init_components(self) -> None:
         select_graph = tk.CTkComboBox(self)
         graph = tk.CTkLabel(self, text="this is graph")
         back_button = tk.CTkButton(self, text="Back")
@@ -237,6 +272,7 @@ class Forum(tk.CTkFrame):
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title = "Forum"
+        self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
         self.init_components()
 
@@ -250,6 +286,7 @@ class Credit(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
+        self.configure(fg_color=FRAME_COLOR)
         self.title = "About us"
         self.controller = controller
         self.init_components()
@@ -265,6 +302,7 @@ class MenuBar(tk.CTkFrame):
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title = "Menu"
+        self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
         self.init_components()
 
