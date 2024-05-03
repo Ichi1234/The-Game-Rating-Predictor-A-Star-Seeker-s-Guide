@@ -21,7 +21,7 @@ class Controller:
         self.view.switch_menu("menu", self)
 
 
-class LoginController(Controller):
+class LoginController(Controller):  # TODO if not use inherit delete it
     """Controller class for login class"""
 
     def __init__(self, view):
@@ -46,6 +46,24 @@ class GameController:
 
 
 class StatController:
+    def __init__(self, view):
+        self.view = view
+
+    def story_telling(self, event):
+        """This method use for login button in Login class"""
+        self.view.switch_menu("story", StoryController(self.view))
+
+    def distribution(self, event):
+        """This method use for login button in Login class"""
+        self.view.switch_menu("distribute", UserGraphController(self.view))
+
+
+class StoryController:
+    def __init__(self, view):
+        self.view = view
+
+
+class UserGraphController:
     def __init__(self, view):
         self.view = view
 

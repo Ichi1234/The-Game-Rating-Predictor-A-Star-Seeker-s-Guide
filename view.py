@@ -23,7 +23,8 @@ class View:
         self.app = App()
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
-                     "forum": Forum, "credit": Credit, "menu": MenuBar}
+                     "forum": Forum, "credit": Credit, "menu": MenuBar,
+                     "story": StoryTelling, "distribute": UserGraph}
 
         self.current_menu = None
         self.menu_open = None
@@ -229,27 +230,35 @@ class StatisticData(tk.CTkFrame):
         for i in range(2):
             self.columnconfigure(i, weight=1)
 
-        # Logo
+        # image to use in button
         distribute_image = tk.CTkImage(light_image=Image.open("img/dis.png"), size=(200, 200))
         storytelling_image = tk.CTkImage(light_image=Image.open("img/scat.png"), size=(200, 200))
 
+        # data story telling graph
         story_button = tk.CTkButton(self, text="", image=storytelling_image, fg_color="transparent")
         story_button.grid(row=2, column=0)
 
+        # label for left button
         left_label = tk.CTkLabel(self, text="Game Rating Prediction", font=('Arial', 18, 'bold'))
         left_label.grid(row=3, column=0, sticky="n")
 
+        # distribution graph (user can create graph in this menu)
         distribution_button = tk.CTkButton(self, text="", image=distribute_image, fg_color="transparent")
         distribution_button.grid(row=2, column=1)
 
+        # label for left button
         right_label = tk.CTkLabel(self, text="Distribution", font=('Arial', 18, 'bold'))
         right_label.grid(row=3, column=1, sticky="n")
+
+        story_button.bind("<Button-1>", self.controller.story_telling)
+        distribution_button.bind("<Button-1>", self.controller.distribution)
 
 
 class StoryTelling(tk.CTkFrame):
     """This class is use for Data story telling"""
 
     def __init__(self, master, controller, *args, **kwargs):
+        """initialize for StoryTelling class"""
         super().__init__(master, *args, **kwargs)
         self.title = "Game Rating Prediction"
         self.configure(fg_color=FRAME_COLOR)
@@ -257,6 +266,7 @@ class StoryTelling(tk.CTkFrame):
         self.init_components()
 
     def init_components(self) -> None:
+        """Create components and layout the UI."""
         select_graph = tk.CTkComboBox(self)
         graph = tk.CTkLabel(self, text="this is graph")
         back_button = tk.CTkButton(self, text="Back")
@@ -264,6 +274,21 @@ class StoryTelling(tk.CTkFrame):
         select_graph.pack(pady=50, expand=True)
         graph.pack(pady=50, expand=True)
         back_button.pack(pady=55, expand=True)
+
+
+class UserGraph(tk.CTkFrame):
+    """User can create the graph that they want"""
+
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.title = "Distribution"
+        self.configure(fg_color=FRAME_COLOR)
+        self.controller = controller
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        pass
 
 
 class Forum(tk.CTkFrame):
