@@ -38,7 +38,6 @@ class View:
 
         elif menu_name == "menu" and not self.controller:
             self.controller = controller
-            self.menu_open.bind("<Button-1>", self.controller.menu_title_button)
 
         self.current_menu = self.menu[menu_name](self.app, controller)
 
@@ -61,7 +60,6 @@ class View:
 
         checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=("Arial", 16))
         checkbox.pack(side="left", expand=True)
-
 
 
     def main_loop(self):
@@ -249,10 +247,10 @@ class MenuBar(tk.CTkFrame):
         credit_button.grid(column=2, row=1)
 
         # Bind Button
-        game_button.bind("<Button-1>", self.controller.menu_button("game"))
-        stat_button.bind("<Button-1>", self.controller.menu_button("stat"))
-        forum_button.bind("<Button-1>", self.controller.menu_button("forum"))
-        credit_button.bind("<Button-1>", self.controller.menu_button("credit"))
+        game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game", event))
+        stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat", event))
+        forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", event))
+        credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit", event))
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from controller import Controller
 
 
 if __name__ == "__main__":
-    modeler = Model()
-    viewer = View()
-    controller = Controller(modeler, viewer)
+    model = Model()
+    view = View()
+    controller = Controller(model, view)
     controller.start_program()

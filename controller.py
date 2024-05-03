@@ -1,6 +1,6 @@
-
 class Controller:
     """MVC Controller"""
+
     def __init__(self, model=None, view=None):
         self.model = model
         self.view = view
@@ -16,13 +16,14 @@ class Controller:
         """method for bind menu button"""
         self.view.switch_menu(menu_name, self.menu[menu_name](self.view))
 
-    def menu_title_button(self, event):
+    def menu_title_button(self):
         """method for bind menu button"""
         self.view.switch_menu("menu", self)
 
 
 class LoginController(Controller):
     """Controller class for login class"""
+
     def __init__(self, view):
         super().__init__()
         self.view = view
@@ -30,6 +31,7 @@ class LoginController(Controller):
     def signin(self, event):
         """This method use for login button in Login class"""
         self.view.switch_menu("game", GameController(self.view))
+        self.view.menu_open.configure(command=self.menu_title_button)
 
     def signup(self, event):
         """This method use for signup button in Login class"""
@@ -38,6 +40,7 @@ class LoginController(Controller):
 
 class GameController:
     """Controller class for game data class"""
+
     def __init__(self, view):
         self.view = view
 
@@ -52,6 +55,3 @@ class ForumController:
 
 class CreditController:
     pass
-
-
-
