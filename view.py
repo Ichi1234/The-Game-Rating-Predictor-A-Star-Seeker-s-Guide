@@ -26,7 +26,6 @@ class View:
 
         self.current_menu = None
         self.menu_open = None
-        self.menu_bar = None
         self.title_label = None
 
         self.app.columnconfigure(0, weight=1)
@@ -49,8 +48,10 @@ class View:
         else:
             self.app.rowconfigure(1, weight=2, minsize=500)
             self.current_menu.grid(row=1, sticky="news", rowspan=2)
+            self.title_label.configure(text=self.current_menu.title)
 
     def menu_title_creation(self):
+        # TODO try to acess menu_open from Frame (menu_label
         menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
         menu_label.grid(row=0, sticky="news")
 
@@ -146,6 +147,7 @@ class GameData(tk.CTkFrame):
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.configure(fg_color="#202020")  # TODO light mode - dark mode
+        self.title = "Game Data"
 
         # String variable for display value
         self.game_title = "Dark Souls"
@@ -214,6 +216,7 @@ class StatisticData(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
+        self.title = "Statistic Data"
         self.controller = controller
         self.init_components()
 
@@ -233,6 +236,7 @@ class Forum(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
+        self.title = "Forum"
         self.controller = controller
         self.init_components()
 
@@ -246,6 +250,7 @@ class Credit(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
+        self.title = "About us"
         self.controller = controller
         self.init_components()
 
@@ -259,6 +264,7 @@ class MenuBar(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
+        self.title = "Menu"
         self.controller = controller
         self.init_components()
 
