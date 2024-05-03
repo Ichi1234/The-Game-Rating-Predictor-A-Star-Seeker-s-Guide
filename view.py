@@ -1,4 +1,5 @@
 from PIL import Image
+from controller import Controller
 import customtkinter as tk
 
 FONT = ("Arial", 16)
@@ -17,6 +18,7 @@ class View:
     """This class is responsible for presenting the data to the user."""
     def __init__(self):
         self.app = App()
+        self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "menu": MenuBar}
 
@@ -33,6 +35,10 @@ class View:
 
         if menu_name not in ["login"] and not self.menu_open:
             self.menu_title_creation()
+
+        elif menu_name == "menu" and not self.controller:
+            self.controller = controller
+            self.menu_open.bind("<Button-1>", self.controller.menu_title_button)
 
         self.current_menu = self.menu[menu_name](self.app, controller)
 
@@ -55,6 +61,8 @@ class View:
 
         checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=("Arial", 16))
         checkbox.pack(side="left", expand=True)
+
+
 
     def main_loop(self):
         """Loop"""

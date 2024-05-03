@@ -1,6 +1,3 @@
-from view import View, Login, GameData, StatisticData, Forum, Credit
-from model import Model
-
 
 class Controller:
     """MVC Controller"""
@@ -15,9 +12,13 @@ class Controller:
         self.view.switch_menu("login", LoginController(self.view))
         self.view.main_loop()
 
-    def menu_button(self, menu_name):
+    def menu_button(self, menu_name, event):
         """method for bind menu button"""
         self.view.switch_menu(menu_name, self.menu[menu_name](self.view))
+
+    def menu_title_button(self, event):
+        """method for bind menu button"""
+        self.view.switch_menu("menu", self)
 
 
 class LoginController(Controller):
@@ -29,7 +30,6 @@ class LoginController(Controller):
     def signin(self, event):
         """This method use for login button in Login class"""
         self.view.switch_menu("game", GameController(self.view))
-        self.view.menu_open.bind("<Button-1>", self.view.switch_menu("menu"))
 
     def signup(self, event):
         """This method use for signup button in Login class"""
@@ -54,8 +54,4 @@ class CreditController:
     pass
 
 
-if __name__ == "__main__":
-    modeler = Model()
-    viewer = View()
-    controller = Controller(modeler, viewer)
-    controller.start_program()
+
