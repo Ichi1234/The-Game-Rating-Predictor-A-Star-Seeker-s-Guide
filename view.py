@@ -30,7 +30,7 @@ class View:
         self.title_label = None
 
         self.app.columnconfigure(0, weight=1)
-        self.app.rowconfigure(0, weight=1)
+        self.app.rowconfigure(0, weight=1, minsize=70)
 
     def switch_menu(self, menu_name, controller=None):
         """This method use for switching menu"""
@@ -225,17 +225,33 @@ class StatisticData(tk.CTkFrame):
 
         select_graph.pack(pady=50, expand=True)
         graph.pack(pady=50, expand=True)
-        back_button.pack(pady=90, expand=True)
+        back_button.pack(pady=55, expand=True)
 
 
 class Forum(tk.CTkFrame):
     """class for Forum menu"""
-    pass
+
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.controller = controller
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        pass
 
 
 class Credit(tk.CTkFrame):
     """class for About us menu"""
-    pass
+
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.controller = controller
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        pass
 
 
 class MenuBar(tk.CTkFrame):

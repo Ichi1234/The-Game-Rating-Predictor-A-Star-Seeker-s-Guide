@@ -51,8 +51,10 @@ class StatController:
 
 
 class ForumController:
-    pass
+    def __init__(self, view):
+        self.view = view
 
 
 class CreditController:
-    pass
+    def __init__(self, view):
+        self.view = view
