@@ -7,6 +7,7 @@ FONT = ("Arial", 16)
 
 class App(tk.CTk):
     """This class use for initialize the program"""
+
     def __init__(self):
         super().__init__()
         self.title("The Game Rating Predictor: A Star Seeker's Guide")
@@ -16,6 +17,7 @@ class App(tk.CTk):
 
 class View:
     """This class is responsible for presenting the data to the user."""
+
     def __init__(self):
         self.app = App()
         self.controller = None
@@ -60,7 +62,6 @@ class View:
 
         checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=("Arial", 16))
         checkbox.pack(side="left", expand=True)
-
 
     def main_loop(self):
         """Loop"""
@@ -141,6 +142,7 @@ class Login(tk.CTkFrame):
 
 class GameData(tk.CTkFrame):
     """class for Game Data menu"""
+
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.configure(fg_color="#202020")  # TODO light mode - dark mode
@@ -209,7 +211,21 @@ class GameData(tk.CTkFrame):
 
 class StatisticData(tk.CTkFrame):
     """class for Statistic Data menu"""
-    pass
+
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.controller = controller
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        select_graph = tk.CTkComboBox(self)
+        graph = tk.CTkLabel(self, text="this is graph")
+        back_button = tk.CTkButton(self, text="Back")
+
+        select_graph.pack(pady=50, expand=True)
+        graph.pack(pady=50, expand=True)
+        back_button.pack(pady=90, expand=True)
 
 
 class Forum(tk.CTkFrame):
@@ -224,6 +240,7 @@ class Credit(tk.CTkFrame):
 
 class MenuBar(tk.CTkFrame):
     """this class is for menu select screen"""
+
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.controller = controller
@@ -231,9 +248,12 @@ class MenuBar(tk.CTkFrame):
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        self.columnconfigure((0,1,2,3), weight=1)
-        self.rowconfigure((0,1,2,3), weight=1)
+        self.columnconfigure((0, 1, 2, 3), weight=1)
+        self.rowconfigure((0, 1, 2, 3), weight=1)
 
+        haha = tk.CTkLabel(self, text="This button screen is for testing I will make real button screen after finished "
+                                      "everything", font=FONT)
+        haha.grid(column=2, row=0)
         game_button = tk.CTkButton(self, text="Game Data")
         game_button.grid(column=1, row=1)
 
