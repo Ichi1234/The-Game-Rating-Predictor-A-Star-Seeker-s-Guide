@@ -9,28 +9,29 @@ class Controller:
 
     def start_program(self):
         """Start the Program"""
-        self.view.switch_menu("login", LoginController(self.view))
+        self.view.switch_menu("login", LoginController(self.view, self.model))
         self.view.main_loop()
 
     def menu_button(self, menu_name, event):
         """method for bind menu button"""
-        self.view.switch_menu(menu_name, self.menu[menu_name](self.view))
+        self.view.switch_menu(menu_name, self.menu[menu_name](self.view, self.model))
 
     def menu_title_button(self):
         """method for bind menu button"""
         self.view.switch_menu("menu", self)
 
 
-class LoginController(Controller):  # TODO if not use inherit delete it
+class LoginController(Controller):
     """Controller class for login class"""
 
-    def __init__(self, view):
+    def __init__(self, view, model):
         super().__init__()
         self.view = view
+        self.model = model
 
     def signin(self, event):
         """This method use for login button in Login class"""
-        self.view.switch_menu("game", GameController(self.view))
+        self.view.switch_menu("game", GameController(self.view, self.model))
         self.view.menu_open.configure(command=self.menu_title_button)
 
     def signup(self, event):
@@ -41,35 +42,44 @@ class LoginController(Controller):  # TODO if not use inherit delete it
 class GameController:
     """Controller class for game data class"""
 
-    def __init__(self, view):
+    def __init__(self, view, model):
         self.view = view
+        self.model = model
 
 
 class StatController:
-    def __init__(self, view):
+    def __init__(self, view, model):
         self.view = view
+        self.model = model
 
     def story_telling(self, event):
         """This method use for login button in Login class"""
-        self.view.switch_menu("story", StatController(self.view))
+        self.view.switch_menu("story", StatController(self.view, self.model))
 
     def distribution(self, event):
         """This method use for login button in Login class"""
-        self.view.switch_menu("distribute", StatController(self.view))
+        self.view.switch_menu("distribute", StatController(self.view, self.model))
 
     def back_button(self, event):
         """This method use in StoryTelling and UserGraph class
            The function of this method is return to Statistic menu
            to chose which statistic menu user want to go again
         """
-        self.view.switch_menu("stat", StatController(self.view))
+        self.view.switch_menu("stat", StatController(self.view, self.model))
+
+    def user_select_graph(self, master, x, y):
+        user_graph = self.model.create_figure(master, x, y)
+        user_graph.get_tk_widget().grid(row=1, column=1, columnspan=1)
+
 
 
 class ForumController:
-    def __init__(self, view):
+    def __init__(self, view, model):
         self.view = view
+        self.model = model
 
 
 class CreditController:
-    def __init__(self, view):
+    def __init__(self, view, model):
         self.view = view
+        self.model = model

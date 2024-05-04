@@ -294,18 +294,20 @@ class UserGraph(tk.CTkFrame):
             self.columnconfigure(i, weight=1)
         for i in range(3):
             self.rowconfigure(i, weight=1)
+
         select_x = tk.CTkComboBox(self)
         select_y = tk.CTkComboBox(self)
-        graph = tk.CTkLabel(self, text="this is graph")
-        back_button = tk.CTkButton(self, text="Back")
-
         select_x.grid(row=0, column=1, sticky="w")
         select_y.grid(row=0, column=1, sticky="e")
 
-        graph.grid(row=1, column=1)
+        back_button = tk.CTkButton(self, text="Back")
         back_button.grid(row=1, column=1, sticky="s")
 
+        start_button = tk.CTkButton(self, text="Create")
+        start_button.grid(row=0, column=2, sticky="w")
+
         back_button.bind("<Button-1>", self.controller.back_button)
+        start_button.bind("<Button-1>", lambda event=None: self.controller.user_select_graph(self, "Plays", "Playing"))
 
 
 class Forum(tk.CTkFrame):
@@ -373,9 +375,3 @@ class MenuBar(tk.CTkFrame):
         stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat", event))
         forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", event))
         credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit", event))
-
-
-if __name__ == "__main__":
-    app = View("a")
-    app.switch_menu("menu")
-    app.main_loop()
