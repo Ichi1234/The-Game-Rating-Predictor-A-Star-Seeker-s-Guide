@@ -19,7 +19,7 @@ class Model:
         pass
 
     @staticmethod
-    def create_figure(self, master, x, y) -> FigureCanvasTkAgg:
+    def create_figure(master, x, y) -> FigureCanvasTkAgg:
         # plot the data
         figure = Figure(figsize=(4, 4))
         ax = figure.subplots()

@@ -68,6 +68,8 @@ class StatController:
         self.view.switch_menu("stat", StatController(self.view, self.model))
 
     def user_select_graph(self, master, x, y):
+        print(x)
+        print(y)
         user_graph = self.model.create_figure(master, x, y)
         user_graph.get_tk_widget().grid(row=4, column=3, sticky="e", columnspan=1)
 
