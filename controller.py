@@ -69,7 +69,7 @@ class StatController:
 
     def user_select_graph(self, master, x, y):
         user_graph = self.model.create_figure(master, x, y)
-        user_graph.get_tk_widget().grid(row=1, column=1, columnspan=1)
+        user_graph.get_tk_widget().grid(row=4, column=3, sticky="e", columnspan=1)
 
 
 

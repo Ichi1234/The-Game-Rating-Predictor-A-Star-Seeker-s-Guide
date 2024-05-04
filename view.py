@@ -286,28 +286,44 @@ class UserGraph(tk.CTkFrame):
         self.title = "Distribution"
         self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
+
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        for i in range(3):
+        for i in range(7):
             self.columnconfigure(i, weight=1)
-        for i in range(3):
+        for i in range(5):
             self.rowconfigure(i, weight=1)
 
-        select_x = tk.CTkComboBox(self)
-        select_y = tk.CTkComboBox(self)
-        select_x.grid(row=0, column=1, sticky="w")
-        select_y.grid(row=0, column=1, sticky="e")
+        # self.controller.user_select_graph(self, "empty_x", "empty_y")
+
+        select_x = tk.CTkComboBox(self, values=["Rating", "Plays", "Playing",
+                                                "Backlogs", "Wishlist", "Lists", "Reviews"])
+
+        select_x.grid(row=0, column=2, sticky="w", pady=20)
+
+        select_y = tk.CTkComboBox(self, values=["Rating", "Plays", "Playing", "Backlogs",
+                                                "Wishlist", "Lists", "Reviews"])
+
+        select_y.grid(row=0, column=4, sticky="w", pady=20)
+
+        label_x = tk.CTkLabel(self, text="x:", font=FONT)
+        label_x.grid(row=0, column=1, sticky="e", padx=10)
+
+        label_y = tk.CTkLabel(self, text="y:", font=FONT)
+        label_y.grid(row=0, column=3, sticky="e", padx=10)
 
         back_button = tk.CTkButton(self, text="Back")
-        back_button.grid(row=1, column=1, sticky="s")
+        back_button.grid(row=4, column=1, sticky="s")
 
-        start_button = tk.CTkButton(self, text="Create")
-        start_button.grid(row=0, column=2, sticky="w")
+        start_button = tk.CTkButton(self, text="Create Graph")
+        start_button.grid(row=0, column=5, sticky="w", padx=10)
 
         back_button.bind("<Button-1>", self.controller.back_button)
-        start_button.bind("<Button-1>", lambda event=None: self.controller.user_select_graph(self, "Plays", "Playing"))
+        start_button.bind("<Button-1>",
+                          lambda event=None: self.controller.user_select_graph(self, select_x.get(),
+                                                                               select_y.get()))
 
 
 class Forum(tk.CTkFrame):

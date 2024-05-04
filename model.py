@@ -34,5 +34,3 @@ class Model:
 
         canvas = FigureCanvasTkAgg(figure, master=master)
         return canvas
-
-
