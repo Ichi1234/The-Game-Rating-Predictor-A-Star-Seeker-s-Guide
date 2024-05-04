@@ -247,7 +247,7 @@ class StatisticData(tk.CTkFrame):
         distribution_button.grid(row=2, column=1)
 
         # label for left button
-        right_label = tk.CTkLabel(self, text="Distribution", font=('Arial', 18, 'bold'))
+        right_label = tk.CTkLabel(self, text="Create Your Graph", font=('Arial', 18, 'bold'))
         right_label.grid(row=3, column=1, sticky="n")
 
         story_button.bind("<Button-1>", self.controller.story_telling)
@@ -283,7 +283,7 @@ class UserGraph(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.title = "Distribution"
+        self.title = "Create Your Graph"
         self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
 

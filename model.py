@@ -18,6 +18,7 @@ class Model:
     def __init__(self):
         pass
 
+    @staticmethod
     def create_figure(self, master, x, y) -> FigureCanvasTkAgg:
         # plot the data
         figure = Figure(figsize=(4, 4))
@@ -25,8 +26,15 @@ class Model:
         sns.barplot(x=x, y=y, data=df, errorbar=None, ax=ax)
         plt.xticks(rotation=45)
 
-        ax.set_xlim(1, 20)
-        ax.set_ylim(1, 45)
+        if x == "Rating":
+            ax.set_xlim(1, 5)
+        else:
+            ax.set_xlim(1, 20)
+
+        if y == "Rating":
+            ax.set_ylim(1, 5)
+        else:
+            ax.set_ylim(1, 45)
 
         ax.set_xlabel(x)
         ax.set_ylabel(y)
