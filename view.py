@@ -16,7 +16,9 @@ class App(tk.CTk):
         tk.set_appearance_mode("dark")
 
     def closing_the_program(self):
-        """When user click at X symbol on the top left destroy everything"""
+        """When user click at X symbol on the top left destroy everything
+        or click at exit button
+        """
         self.tk.quit()
 
 
@@ -59,18 +61,22 @@ class View:
             self.title_label.configure(text=self.current_menu.title)
 
     def menu_title_creation(self):
-        # TODO try to acess menu_open from Frame (menu_label
+        # TODO try to access menu_open from Frame (menu_label
         menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
         menu_label.grid(row=0, sticky="news")
 
-        self.menu_open = tk.CTkButton(menu_label, text="Menu", fg_color="dark blue", font=("Arial", 16))
+        self.menu_open = tk.CTkButton(menu_label, text="Menu", fg_color="transparent", font=FONT)
         self.menu_open.pack(side="left", expand=True)
 
-        self.title_label = tk.CTkLabel(menu_label, text="Game Data", fg_color="dark blue", font=("Arial", 16))
-        self.title_label.pack(side="left", padx=220, pady=3, expand=True)
+        self.title_label = tk.CTkLabel(menu_label, text="Game Data", fg_color="transparent", font=FONT)
+        self.title_label.pack(side="left", padx=100, pady=3, expand=True)
 
-        checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=("Arial", 16))
+        checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=FONT)
         checkbox.pack(side="left", expand=True)
+
+        exit_button = tk.CTkButton(menu_label, text="Exit", font=FONT,
+                                   command=self.app.closing_the_program, fg_color="transparent")
+        exit_button.pack(side="left", expand=True)
 
     def main_loop(self):
         """Loop"""

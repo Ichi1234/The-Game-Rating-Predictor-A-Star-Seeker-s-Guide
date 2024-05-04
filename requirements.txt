@@ -1,0 +1,6 @@
+PIL
+customtkinter
+matplotlib
+seaborn
+numpy
+pandas
