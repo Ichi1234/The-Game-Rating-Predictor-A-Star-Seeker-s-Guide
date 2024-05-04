@@ -1,8 +1,5 @@
 import pandas as pd
-import numpy as np
 import seaborn as sns
-from PIL import Image
-import customtkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -13,7 +10,9 @@ df = pd.read_csv('backloggd_games.csv')
 df = df.iloc[:, 1:]
 df.dropna(subset=df.columns.tolist(), how='any', inplace=True)
 
-
+seaborn.scatterplot(x="timepoint",
+                    y="signal",
+                    data=fmri)
 class Model:
     def __init__(self):
         pass

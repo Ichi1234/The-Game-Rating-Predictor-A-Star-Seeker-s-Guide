@@ -1,5 +1,4 @@
 from PIL import Image
-from controller import Controller
 import customtkinter as tk
 
 FONT = ("Arial", 16)
