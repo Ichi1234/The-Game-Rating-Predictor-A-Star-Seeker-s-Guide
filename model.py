@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from PIL import Image
 
+
 class Model:
     def __init__(self):
         self.df = pd.read_csv('backloggd_games.csv')
@@ -20,6 +21,7 @@ class Model:
     def stats(self, column):
         return {"mean": self.df[column].mean(), "sd": self.df[column].std(),
                 "min": self.df[column].min(), "max": self.df[column].max(), "var": self.df[column].var()}
+
     @staticmethod
     def pull_image(img_name):
         """sent image to controller"""
