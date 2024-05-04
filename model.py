@@ -27,7 +27,7 @@ class Model:
         # plot the data
         figure = Figure(figsize=(6, 6))
         ax = figure.subplots()
-        sns.barplot(x='Playing', y='Plays', data=df, errorbar=None)
+        sns.barplot(x='Playing', y='Plays', data=df, errorbar=None, ax=ax)
         plt.xticks(rotation=45)
 
         ax.set_xlim(1, 20)
