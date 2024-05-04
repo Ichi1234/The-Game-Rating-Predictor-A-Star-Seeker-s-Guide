@@ -17,6 +17,9 @@ class Model:
             if change in ['Plays', 'Playing', 'Backlogs', 'Wishlist', 'Lists', 'Reviews']:
                 self.df[change] = pd.to_numeric(self.df[change], errors='coerce')
 
+    def stats(self, column):
+        return {"mean": self.df[column].mean(), "sd": self.df[column].std(),
+                "min": self.df[column].min(), "max": self.df[column].max(), "var": self.df[column].var()}
     @staticmethod
     def pull_image(img_name):
         """sent image to controller"""

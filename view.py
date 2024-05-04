@@ -31,7 +31,7 @@ class View:
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "menu": MenuBar,
-                     "story": StoryTelling, "distribute": UserGraph}
+                     "story": StoryTelling, "distribute": UserGraph, "statistic": Statistic}
 
         self.current_menu = None
         self.menu_open = None
@@ -238,7 +238,7 @@ class StatisticData(tk.CTkFrame):
         """Create components and layout the UI."""
         for i in range(5):
             self.rowconfigure(i, weight=1)
-        for i in range(2):
+        for i in range(3):
             self.columnconfigure(i, weight=1)
 
         # image to use in button
@@ -253,16 +253,49 @@ class StatisticData(tk.CTkFrame):
         left_label = tk.CTkLabel(self, text="Game Rating Prediction", font=('Arial', 18, 'bold'))
         left_label.grid(row=3, column=0, sticky="n")
 
+        # statistic menu use for show mean median max
+        stat_button = tk.CTkButton(self, text="", image=distribute_image, fg_color="transparent")
+        stat_button.grid(row=2, column=1)
+
+        # label for middle button
+        middle_label = tk.CTkLabel(self, text="Statistic", font=('Arial', 18, 'bold'))
+        middle_label.grid(row=3, column=1, sticky="n")
+
         # distribution graph (user can create graph in this menu)
         distribution_button = tk.CTkButton(self, text="", image=distribute_image, fg_color="transparent")
-        distribution_button.grid(row=2, column=1)
+        distribution_button.grid(row=2, column=2)
 
         # label for left button
         right_label = tk.CTkLabel(self, text="Create Your Graph", font=('Arial', 18, 'bold'))
-        right_label.grid(row=3, column=1, sticky="n")
+        right_label.grid(row=3, column=2, sticky="n")
 
         story_button.bind("<Button-1>", self.controller.story_telling)
+        stat_button.bind("<Button-1>", self.controller.stats)
         distribution_button.bind("<Button-1>", self.controller.distribution)
+
+
+class Statistic(tk.CTkFrame):
+    """This class is use for show statistic"""
+
+    def __init__(self, master, controller, *args, **kwargs):
+        """initialize for Statistic class"""
+        super().__init__(master, *args, **kwargs)
+        self.title = "Statistic"
+        self.configure(fg_color=FRAME_COLOR)
+        self.controller = controller
+        self.statistic = tk.CTkLabel(self, text="None")
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        self.statistic.pack()
+        combo = tk.CTkComboBox(self, values=["Rating"])
+        combo.pack()
+
+        statistic_button = tk.CTkButton(self)
+        statistic_button.bind("<Button-1>", lambda event=None: self.controller.get_statistic(combo.get()))
+        statistic_button.pack()
+
 
 
 class StoryTelling(tk.CTkFrame):

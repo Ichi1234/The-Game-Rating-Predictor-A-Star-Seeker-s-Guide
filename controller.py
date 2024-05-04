@@ -56,11 +56,15 @@ class StatController:
         self.model = model
 
     def story_telling(self, event):
-        """This method use for login button in Login class"""
+        """This method use for story button in Statistic class"""
         self.view.switch_menu("story", StatController(self.view, self.model))
 
+    def stats(self, event):
+        """This method use for stats button in Statistic class"""
+        self.view.switch_menu("statistic", StatController(self.view, self.model))
+
     def distribution(self, event):
-        """This method use for login button in Login class"""
+        """This method use for distribution button in Statistic class"""
         self.view.switch_menu("distribute", StatController(self.view, self.model))
 
     def back_button(self, event):
@@ -77,6 +81,9 @@ class StatController:
     def story_graph(self, which):
         img = tk.CTkImage(light_image=self.model.pull_image(which), size=(300, 300))
         self.view.current_menu.graph.configure(image=img)
+
+    def get_statistic(self, column):
+        self.view.current_menu.statistic.configure(text=f"{self.model.stats(column)}")
 
 
 class ForumController:
