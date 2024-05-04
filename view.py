@@ -275,6 +275,8 @@ class StoryTelling(tk.CTkFrame):
         graph.pack(pady=50, expand=True)
         back_button.pack(pady=55, expand=True)
 
+        back_button.bind("<Button-1>", self.controller.back_button)
+
 
 class UserGraph(tk.CTkFrame):
     """User can create the graph that they want"""
@@ -288,7 +290,22 @@ class UserGraph(tk.CTkFrame):
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        pass
+        for i in range(3):
+            self.columnconfigure(i, weight=1)
+        for i in range(3):
+            self.rowconfigure(i, weight=1)
+        select_x = tk.CTkComboBox(self)
+        select_y = tk.CTkComboBox(self)
+        graph = tk.CTkLabel(self, text="this is graph")
+        back_button = tk.CTkButton(self, text="Back")
+
+        select_x.grid(row=0, column=1, sticky="w")
+        select_y.grid(row=0, column=1, sticky="e")
+
+        graph.grid(row=1, column=1)
+        back_button.grid(row=1, column=1, sticky="s")
+
+        back_button.bind("<Button-1>", self.controller.back_button)
 
 
 class Forum(tk.CTkFrame):

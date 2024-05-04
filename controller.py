@@ -51,21 +51,18 @@ class StatController:
 
     def story_telling(self, event):
         """This method use for login button in Login class"""
-        self.view.switch_menu("story", StoryController(self.view))
+        self.view.switch_menu("story", StatController(self.view))
 
     def distribution(self, event):
         """This method use for login button in Login class"""
-        self.view.switch_menu("distribute", UserGraphController(self.view))
+        self.view.switch_menu("distribute", StatController(self.view))
 
-
-class StoryController:
-    def __init__(self, view):
-        self.view = view
-
-
-class UserGraphController:
-    def __init__(self, view):
-        self.view = view
+    def back_button(self, event):
+        """This method use in StoryTelling and UserGraph class
+           The function of this method is return to Statistic menu
+           to chose which statistic menu user want to go again
+        """
+        self.view.switch_menu("stat", StatController(self.view))
 
 
 class ForumController:
