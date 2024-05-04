@@ -15,12 +15,18 @@ class App(tk.CTk):
         self.geometry("800x500")
         tk.set_appearance_mode("dark")
 
+    def closing_the_program(self):
+        """When user click at X symbol on the top left destroy everything"""
+        self.tk.quit()
+
 
 class View:
     """This class is responsible for presenting the data to the user."""
 
     def __init__(self):
         self.app = App()
+
+        self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "menu": MenuBar,

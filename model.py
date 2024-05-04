@@ -29,12 +29,12 @@ class Model:
         if x == "Rating":
             ax.set_xlim(1, 5)
         else:
-            ax.set_xlim(1, 20)
+            ax.set_xlim(1, 10)
 
         if y == "Rating":
             ax.set_ylim(1, 5)
         else:
-            ax.set_ylim(1, 45)
+            ax.set_ylim(1, 25)
 
         ax.set_xlabel(x)
         ax.set_ylabel(y)
