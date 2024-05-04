@@ -274,19 +274,25 @@ class StoryTelling(tk.CTkFrame):
         self.title = "Game Rating Prediction"
         self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
+        self.graph = tk.CTkLabel(self, text="")
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        select_graph = tk.CTkComboBox(self)
-        graph = tk.CTkLabel(self, text="this is graph")
+        select_graph = tk.CTkComboBox(self, values=["Rating and Plays"])
+
         back_button = tk.CTkButton(self, text="Back")
 
-        select_graph.pack(pady=50, expand=True)
-        graph.pack(pady=50, expand=True)
-        back_button.pack(pady=55, expand=True)
+        select_graph.pack(pady=10, expand=True)
+        self.graph.pack(pady=10, expand=True)
+        back_button.pack(pady=10, expand=True)
 
         back_button.bind("<Button-1>", self.controller.back_button)
+
+        start_button = tk.CTkButton(self, text="Create Graph")
+        start_button.pack(expand=True)
+
+        start_button.bind("<Button-1>", lambda event=None: self.controller.story_graph(select_graph.get()))
 
 
 class UserGraph(tk.CTkFrame):

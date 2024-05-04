@@ -1,3 +1,6 @@
+import customtkinter as tk
+
+
 class Controller:
     """MVC Controller"""
 
@@ -71,6 +74,9 @@ class StatController:
         user_graph = self.model.create_figure(master, x, y)
         user_graph.get_tk_widget().grid(row=4, column=3, sticky="e", columnspan=1)
 
+    def story_graph(self, which):
+        img = tk.CTkImage(light_image=self.model.pull_image(which), size=(300, 300))
+        self.view.current_menu.graph.configure(image=img)
 
 
 class ForumController:
