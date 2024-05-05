@@ -31,7 +31,7 @@ class View:
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "menu": MenuBar,
-                     "story": StoryTelling, "distribute": UserGraph, "statistic": Statistic}
+                     "story": StoryTelling, "distribute": UserGraph, "statistic": StatisticMenu}
 
         self.current_menu = None
         self.menu_open = None
@@ -274,7 +274,7 @@ class StatisticData(tk.CTkFrame):
         distribution_button.bind("<Button-1>", self.controller.distribution)
 
 
-class Statistic(tk.CTkFrame):
+class StatisticMenu(tk.CTkFrame):
     """This class is use for show statistic"""
 
     def __init__(self, master, controller, *args, **kwargs):
@@ -283,19 +283,28 @@ class Statistic(tk.CTkFrame):
         self.title = "Statistic"
         self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
-        self.statistic = tk.CTkLabel(self, text="None")
+        self.database = None
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        self.statistic.pack()
-        combo = tk.CTkComboBox(self, values=["Rating"])
-        combo.pack()
+        for i in range(3):
+            self.columnconfigure(i, weight=1)
+            self.rowconfigure(i, weight=1)
 
-        statistic_button = tk.CTkButton(self)
-        statistic_button.bind("<Button-1>", lambda event=None: self.controller.get_statistic(combo.get()))
-        statistic_button.pack()
+        select_attribute = tk.CTkComboBox(self, values=["Rating", "Plays", "Playing",
+                                                        "Backlogs", "Wishlist", "Lists", "Reviews"],
+                                          command=lambda event=None:
+                                          self.controller.get_statistic(select_attribute.get()))
 
+        select_attribute.grid(row=0, column=1)
+
+        dataframe = tk.CTkFrame(self, fg_color="#2d2d2d")
+        dataframe.grid(row=1, column=1, sticky="news")
+
+        self.database = tk.CTkLabel(dataframe, text="Mean: None\nS.D.: None\nMin: None"
+                                                    "\nMax: None\nVariance: None", font=FONT)
+        self.database.pack()
 
 
 class StoryTelling(tk.CTkFrame):

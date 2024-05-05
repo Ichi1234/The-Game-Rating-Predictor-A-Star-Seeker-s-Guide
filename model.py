@@ -11,9 +11,10 @@ class Model:
         self.df = pd.read_csv('backloggd_games.csv')
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
-        # self.string_to_number()
+        self.string_to_number()
 
     def string_to_number(self):
+        """Convert K (1,000) in csv to be integer"""
         for change in self.df.columns.tolist():
             if change in ['Plays', 'Playing', 'Backlogs', 'Wishlist', 'Lists', 'Reviews']:
                 self.df[change] = pd.to_numeric(self.df[change], errors='coerce')

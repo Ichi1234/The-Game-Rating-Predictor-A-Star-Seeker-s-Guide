@@ -28,6 +28,7 @@ class LoginController(Controller):
     """Controller class for login class"""
 
     def __init__(self, view, model):
+        """Initialize for LoginController"""
         super().__init__()
         self.view = view
         self.model = model
@@ -82,8 +83,12 @@ class StatController:
         img = tk.CTkImage(light_image=self.model.pull_image(which), size=(300, 300))
         self.view.current_menu.graph.configure(image=img)
 
-    def get_statistic(self, column):
-        self.view.current_menu.statistic.configure(text=f"{self.model.stats(column)}")
+    def get_statistic(self, column: str):
+        """Get statistic dict from model"""
+        data = self.model.stats(column)
+        self.view.current_menu.database.configure(text=f"Mean: {data['mean']}\nS.D.: {data['sd']}"
+                                                       f"\nMin: {data['min']}\nMax: {data['max']}"
+                                                       f"\nVariance: {data['var']}")
 
 
 class ForumController:
