@@ -60,20 +60,9 @@ class StatController:
         """This method use for story button in Statistic class"""
         self.view.switch_menu("story", StatController(self.view, self.model))
 
-    def stats(self, event):
-        """This method use for stats button in Statistic class"""
-        self.view.switch_menu("statistic", StatController(self.view, self.model))
-
-    def distribution(self, event):
-        """This method use for distribution button in Statistic class"""
-        self.view.switch_menu("distribute", StatController(self.view, self.model))
-
-    def back_button(self, event):
-        """This method use in StoryTelling and UserGraph class
-           The function of this method is return to Statistic menu
-           to chose which statistic menu user want to go again
-        """
-        self.view.switch_menu("stat", StatController(self.view, self.model))
+    def change_statistic_menu(self, statistic_menu: str):
+        """This method use for change statistic menu"""
+        self.view.switch_menu(statistic_menu, StatController(self.view, self.model))
 
     def user_select_graph(self, master, x, y):
         user_graph = self.model.create_figure(master, x, y)
@@ -86,9 +75,10 @@ class StatController:
     def get_statistic(self, column: str):
         """Get statistic dict from model"""
         data = self.model.stats(column)
-        self.view.current_menu.database.configure(text=f"Mean: {data['mean']}\nS.D.: {data['sd']}"
-                                                       f"\nMin: {data['min']}\nMax: {data['max']}"
-                                                       f"\nVariance: {data['var']}")
+        self.view.current_menu.database.configure(text=f"Mean = {data['mean']}\nMedian = {data['median']}"
+                                                       f"\nS.D. = {data['sd']}\nMin = {data['min']}"
+                                                       f"\nMax = {data['max']}\nVariance = {data['var']}")
+
 
 
 class ForumController:

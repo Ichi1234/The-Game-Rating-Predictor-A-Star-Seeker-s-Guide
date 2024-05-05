@@ -269,9 +269,9 @@ class StatisticData(tk.CTkFrame):
         right_label = tk.CTkLabel(self, text="Create Your Graph", font=('Arial', 18, 'bold'))
         right_label.grid(row=3, column=2, sticky="n")
 
-        story_button.bind("<Button-1>", self.controller.story_telling)
-        stat_button.bind("<Button-1>", self.controller.stats)
-        distribution_button.bind("<Button-1>", self.controller.distribution)
+        story_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("story"))
+        stat_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("statistic"))
+        distribution_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("distribute"))
 
 
 class StatisticMenu(tk.CTkFrame):
@@ -288,23 +288,34 @@ class StatisticMenu(tk.CTkFrame):
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
+        self.columnconfigure(0, weight=1, minsize=200)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1, minsize=200)
+
         for i in range(3):
-            self.columnconfigure(i, weight=1)
             self.rowconfigure(i, weight=1)
+
+        select_label = tk.CTkLabel(self, text="Select Attributes =", font=FONT)
+        select_label.grid(row=0, column=1, sticky="w")
 
         select_attribute = tk.CTkComboBox(self, values=["Rating", "Plays", "Playing",
                                                         "Backlogs", "Wishlist", "Lists", "Reviews"],
                                           command=lambda event=None:
                                           self.controller.get_statistic(select_attribute.get()))
 
-        select_attribute.grid(row=0, column=1)
+        select_attribute.grid(row=0, column=1, padx=120)
 
         dataframe = tk.CTkFrame(self, fg_color="#2d2d2d")
         dataframe.grid(row=1, column=1, sticky="news")
 
-        self.database = tk.CTkLabel(dataframe, text="Mean: None\nS.D.: None\nMin: None"
-                                                    "\nMax: None\nVariance: None", font=FONT)
-        self.database.pack()
+        self.database = tk.CTkLabel(dataframe, text="Mean = None\nMedian = None\nS.D. = None\nMin = None"
+                                                    "\nMax = None\nVariance = None", font=("Arial", 25))
+        self.database.pack(pady=20)
+
+        back_button = tk.CTkButton(self, text="Back")
+        back_button.grid(row=2, column=1)
+
+        back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
 
 
 class StoryTelling(tk.CTkFrame):
@@ -329,7 +340,7 @@ class StoryTelling(tk.CTkFrame):
         self.graph.pack(pady=10, expand=True)
         back_button.pack(pady=10, expand=True)
 
-        back_button.bind("<Button-1>", self.controller.back_button)
+        back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
 
         start_button = tk.CTkButton(self, text="Create Graph")
         start_button.pack(expand=True)
@@ -379,7 +390,7 @@ class UserGraph(tk.CTkFrame):
         start_button = tk.CTkButton(self, text="Create Graph")
         start_button.grid(row=0, column=5, sticky="w", padx=10)
 
-        back_button.bind("<Button-1>", self.controller.back_button)
+        back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
         start_button.bind("<Button-1>",
                           lambda event=None: self.controller.user_select_graph(self, select_x.get(),
                                                                                select_y.get()))

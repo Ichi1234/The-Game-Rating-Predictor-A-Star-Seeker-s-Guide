@@ -20,8 +20,9 @@ class Model:
                 self.df[change] = pd.to_numeric(self.df[change], errors='coerce')
 
     def stats(self, column):
-        return {"mean": self.df[column].mean(), "sd": self.df[column].std(),
-                "min": self.df[column].min(), "max": self.df[column].max(), "var": self.df[column].var()}
+        return {"mean": round(self.df[column].mean(), 3), "median": round(self.df[column].median(), 3),
+                "sd": round(self.df[column].std(), 3),
+                "min": self.df[column].min(), "max": self.df[column].max(), "var": round(self.df[column].var(), 3)}
 
     @staticmethod
     def pull_image(img_name):
