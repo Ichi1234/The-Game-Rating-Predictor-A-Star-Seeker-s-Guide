@@ -25,6 +25,7 @@ class View:
     """This class is responsible for presenting the data to the user."""
 
     def __init__(self):
+        """Initialize of View class"""
         self.app = App()
 
         self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
@@ -60,7 +61,7 @@ class View:
             self.title_label.configure(text=self.current_menu.title)
 
     def menu_title_creation(self):
-        # TODO try to access menu_open from Frame (menu_label
+        """Create menu label at the top"""
         menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
         menu_label.grid(row=0, sticky="news")
 
@@ -78,7 +79,7 @@ class View:
         exit_button.pack(side="left", expand=True)
 
     def main_loop(self):
-        """Loop"""
+        """Loop of the program"""
         self.app.mainloop()
 
 
@@ -161,10 +162,17 @@ class GameData(tk.CTkFrame):
         super().__init__(master, *args, **kwargs)
         self.configure(fg_color=FRAME_COLOR)  # TODO light mode - dark mode
         self.title = "Game Data"
+        self.controller = controller
 
         # String variable for display value
         self.game_title = "Dark Souls"
-        self.summary_text = "WOAHHHH THIS GAME IS SO GOOOOOD"
+
+        # The summary of gameplay or story
+        self.summary = tk.CTkLabel(self, text="None", font=FONT)
+
+        # Title of the current game
+        self.game_title = tk.CTkLabel(self, text=f"{self.game_title}: Datas", font=("Arial", 22))
+
         self.rating = ""
         self.genre = ""
         self.platform = ""
@@ -192,17 +200,15 @@ class GameData(tk.CTkFrame):
         summary_label = tk.CTkLabel(self, text="Description of The game", font=("Arial", 22))
         summary_label.grid(row=2, column=1, sticky="nw")
 
-        # The summary of gameplay or story
-        summary = tk.CTkLabel(self, text="Description of The game", font=FONT)
-        summary.grid(row=2, column=1, sticky="w")
+
+        self.summary.grid(row=2, column=1, sticky="w")
 
         # Use for search the game
-        search_box = tk.CTkComboBox(self)
+        search_box = tk.CTkComboBox(self, values=self.controller.get_game_title())
         search_box.grid(row=1, column=1, sticky="new")
 
-        # Title of the current game
-        game_title = tk.CTkLabel(self, text=f"{self.game_title}: Datas", font=("Arial", 22))
-        game_title.grid(row=0, column=3, sticky="wes", columnspan=3, pady=20)
+
+        self.game_title.grid(row=0, column=3, sticky="wes", columnspan=3, pady=20)
 
         # Dataframe for shows values of that game
         self.data_frame.grid(row=1, column=3, sticky="news", rowspan=3, columnspan=3, padx=50)

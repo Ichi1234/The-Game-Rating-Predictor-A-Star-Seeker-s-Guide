@@ -50,6 +50,14 @@ class GameController:
         self.view = view
         self.model = model
 
+    def get_game_title(self):
+        """Get game title from model then send it to view"""
+        return self.model.game_title
+
+    def get_data_of_the_game(self, game_name):
+        """Get data of the game from model"""
+        data = self.model.find_game_data(game_name)
+
 
 class StatController:
     def __init__(self, view, model):
@@ -78,7 +86,6 @@ class StatController:
         self.view.current_menu.database.configure(text=f"Mean = {data['mean']}\nMedian = {data['median']}"
                                                        f"\nS.D. = {data['sd']}\nMin = {data['min']}"
                                                        f"\nMax = {data['max']}\nVariance = {data['var']}")
-
 
 
 class ForumController:

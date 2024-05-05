@@ -11,6 +11,8 @@ class Model:
         self.df = pd.read_csv('backloggd_games.csv')
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
+
+        self.game_title = self.df["Title"].values.tolist()
         self.string_to_number()
 
     def string_to_number(self):
@@ -20,9 +22,14 @@ class Model:
                 self.df[change] = pd.to_numeric(self.df[change], errors='coerce')
 
     def stats(self, column):
+        """Send statistic datas to controller"""
         return {"mean": round(self.df[column].mean(), 3), "median": round(self.df[column].median(), 3),
                 "sd": round(self.df[column].std(), 3),
                 "min": self.df[column].min(), "max": self.df[column].max(), "var": round(self.df[column].var(), 3)}
+
+    def find_game_data(self, name_of_the_game):
+        """Send datas of the game to controller"""
+        return self.df[self.df == name_of_the_game].to_dict()
 
     @staticmethod
     def pull_image(img_name):
