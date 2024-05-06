@@ -11,15 +11,23 @@ class Model:
         self.df = pd.read_csv('backloggd_games.csv')
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
-
-        self.game_title = self.df["Title"].values.tolist()
         self.string_to_number()
+
+    def game_title(self):
+        return self.df["Title"].values.tolist()
+
+    @staticmethod
+    def k_destroyer(val):
+        """Remove K in csv and *1000 to the value which have K"""
+        val = val.replace('K', '')
+        val = float(val)
+        return val * 1000
 
     def string_to_number(self):
         """Convert K (1,000) in csv to be integer"""
         for change in self.df.columns.tolist():
             if change in ['Plays', 'Playing', 'Backlogs', 'Wishlist', 'Lists', 'Reviews']:
-                self.df[change] = pd.to_numeric(self.df[change], errors='coerce')
+                self.df[change].apply(self.k_destroyer)
 
     def stats(self, column):
         """Send statistic datas to controller"""
@@ -29,7 +37,7 @@ class Model:
 
     def find_game_data(self, name_of_the_game):
         """Send datas of the game to controller"""
-        return self.df[self.df == name_of_the_game].to_dict()
+        return self.df[self.df['Title'] == name_of_the_game].iloc[0].to_dict()
 
     @staticmethod
     def pull_image(img_name):

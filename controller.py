@@ -52,11 +52,18 @@ class GameController:
 
     def get_game_title(self):
         """Get game title from model then send it to view"""
-        return self.model.game_title
+        return self.model.game_title()
 
     def get_data_of_the_game(self, game_name):
         """Get data of the game from model"""
         data = self.model.find_game_data(game_name)
+        self.view.current_menu.game_title.configure(text=f"{data['Title']}: Datas")
+        data['Summary'] = "\n".join([data['Summary'][i:i + 50] for i in range(0, len(data['Summary']), 50)])
+        self.view.current_menu.summary.configure(text=f"{data['Summary']}")
+        self.view.current_menu.player.configure(text=f"Totals Players: {data['Plays']}")
+        self.view.current_menu.rating.configure(text=f"Rating: {data['Rating']}")
+        self.view.current_menu.genres.configure(text=f"Genres: {data['Genres']}")
+        self.view.current_menu.platform.configure(text=f"Platforms: {data['Platforms']}")
 
 
 class StatController:

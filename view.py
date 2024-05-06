@@ -44,6 +44,10 @@ class View:
     def switch_menu(self, menu_name, controller=None):
         """This method use for switching menu"""
 
+        # Fix Memory Management My code not working because I'm not delete old widget
+        if self.current_menu is not None:
+            self.current_menu.destroy()
+
         if menu_name not in ["login"] and not self.menu_open:
             self.menu_title_creation()
 
@@ -164,18 +168,21 @@ class GameData(tk.CTkFrame):
         self.title = "Game Data"
         self.controller = controller
 
-        # String variable for display value
-        self.game_title = "Dark Souls"
-
         # The summary of gameplay or story
         self.summary = tk.CTkLabel(self, text="None", font=FONT)
-
+        self.data_frame = tk.CTkFrame(master=self, fg_color="#2d2d2d")
         # Title of the current game
-        self.game_title = tk.CTkLabel(self, text=f"{self.game_title}: Datas", font=("Arial", 22))
+        self.game_title = tk.CTkLabel(self, text="Please selects the game", font=("Arial", 22))
 
-        self.rating = ""
-        self.genre = ""
-        self.platform = ""
+        self.player = tk.CTkLabel(self.data_frame, text="Totals Players: None", font=FONT)
+
+        self.rating = tk.CTkLabel(self.data_frame, text="Rating: None", font=FONT)
+
+        self.genres = tk.CTkLabel(self.data_frame, text="Genres: None", font=FONT)
+
+        self.platform = tk.CTkLabel(self.data_frame, text="Platforms: None", font=FONT)
+
+        self.search_box = None
 
         self.columnconfigure(0, weight=2, minsize=20)
         for i in range(4):
@@ -187,12 +194,11 @@ class GameData(tk.CTkFrame):
 
         self.rowconfigure(4, weight=2, minsize=40)
 
-        self.data_frame = tk.CTkFrame(master=self, fg_color="#2d2d2d")
-
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
+
         search_label = tk.CTkLabel(self, text="Find Game by Title", font=("Arial", 22))
         search_label.grid(row=0, column=1, sticky="ws", pady=20)
 
@@ -200,13 +206,12 @@ class GameData(tk.CTkFrame):
         summary_label = tk.CTkLabel(self, text="Description of The game", font=("Arial", 22))
         summary_label.grid(row=2, column=1, sticky="nw")
 
-
-        self.summary.grid(row=2, column=1, sticky="w")
+        self.summary.grid(row=3, column=1, sticky="news")
 
         # Use for search the game
-        search_box = tk.CTkComboBox(self, values=self.controller.get_game_title())
-        search_box.grid(row=1, column=1, sticky="new")
-
+        self.search_box = tk.CTkComboBox(self, values=self.controller.get_game_title(), command=lambda event=None:
+        self.controller.get_data_of_the_game(self.search_box.get()))
+        self.search_box.grid(row=1, column=1, sticky="new")
 
         self.game_title.grid(row=0, column=3, sticky="wes", columnspan=3, pady=20)
 
@@ -217,17 +222,13 @@ class GameData(tk.CTkFrame):
 
         # Data in dataframe
         option = {"sticky": "nw", "padx": 10, "pady": 10}
-        player = tk.CTkLabel(self.data_frame, text=f"Totals Players: {self.rating}", font=FONT)
-        player.grid(row=0, column=0, **option)
+        self.player.grid(row=0, column=0, **option)
 
-        rating = tk.CTkLabel(self.data_frame, text=f"Rating: {self.rating}", font=FONT)
-        rating.grid(row=1, column=0, **option)
+        self.rating.grid(row=1, column=0, **option)
 
-        genres = tk.CTkLabel(self.data_frame, text=f"Genres: {self.genre}", font=FONT)
-        genres.grid(row=2, column=0, **option)
+        self.genres.grid(row=2, column=0, **option)
 
-        platform = tk.CTkLabel(self.data_frame, text=f"Platforms: {self.platform}", font=FONT)
-        platform.grid(row=3, column=0, **option)
+        self.platform.grid(row=3, column=0, **option)
 
 
 class StatisticData(tk.CTkFrame):
