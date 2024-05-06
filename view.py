@@ -209,8 +209,10 @@ class GameData(tk.CTkFrame):
         self.summary.grid(row=3, column=1, sticky="news")
 
         # Use for search the game
-        self.search_box = tk.CTkComboBox(self, values=self.controller.get_game_title(), command=lambda event=None:
-        self.controller.get_data_of_the_game(self.search_box.get()))
+        self.search_box = tk.CTkComboBox(self, values=self.controller.get_game_title(),
+                                         command=lambda event=None: self.controller
+                                         .get_data_of_the_game(self.search_box.get()))
+        
         self.search_box.grid(row=1, column=1, sticky="new")
 
         self.game_title.grid(row=0, column=3, sticky="wes", columnspan=3, pady=20)

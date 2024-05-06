@@ -57,8 +57,15 @@ class GameController:
     def get_data_of_the_game(self, game_name):
         """Get data of the game from model"""
         data = self.model.find_game_data(game_name)
-        self.view.current_menu.game_title.configure(text=f"{data['Title']}: Datas")
+
+        # add new line if summary is too long
         data['Summary'] = "\n".join([data['Summary'][i:i + 50] for i in range(0, len(data['Summary']), 50)])
+
+        # if data is list turn it to str
+        data['Genres'] = ",".join(eval(data['Genres']))
+        data['Platforms'] = ",".join(eval(data['Platforms']))
+
+        self.view.current_menu.game_title.configure(text=f"{data['Title']}: Datas")
         self.view.current_menu.summary.configure(text=f"{data['Summary']}")
         self.view.current_menu.player.configure(text=f"Totals Players: {data['Plays']}")
         self.view.current_menu.rating.configure(text=f"Rating: {data['Rating']}")

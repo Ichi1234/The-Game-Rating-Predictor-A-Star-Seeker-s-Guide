@@ -28,6 +28,7 @@ class Model:
         for change in self.df.columns.tolist():
             if change in ['Plays', 'Playing', 'Backlogs', 'Wishlist', 'Lists', 'Reviews']:
                 self.df[change].apply(self.k_destroyer)
+                self.df[change] = pd.to_numeric(self.df[change], errors='coerce')
 
     def stats(self, column):
         """Send statistic datas to controller"""
@@ -49,18 +50,10 @@ class Model:
         # plot the data
         figure = Figure(figsize=(4, 4))
         ax = figure.subplots()
-        sns.barplot(x=x, y=y, data=self.df, errorbar=None, ax=ax)
-        plt.xticks(rotation=45)
 
-        if x == "Rating":
-            ax.set_xlim(1, 5)
-        else:
-            ax.set_xlim(1, 10)
-
-        if y == "Rating":
-            ax.set_ylim(1, 5)
-        else:
-            ax.set_ylim(1, 10)
+        s = sns.barplot(x=x, y=y, data=self.df, errorbar=None, ax=ax)
+        s.set_xticklabels([])
+        s.set_yticklabels([])
 
         ax.set_xlabel(x)
         ax.set_ylabel(y)
