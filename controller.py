@@ -59,11 +59,11 @@ class GameController:
         data = self.model.find_game_data(game_name)
 
         # add new line if summary is too long
-        data['Summary'] = "\n".join([data['Summary'][i:i + 50] for i in range(0, len(data['Summary']), 50)])
+        data['Summary'] = "\n".join([data['Summary'][i:i + 45] for i in range(0, len(data['Summary']), 45)])
 
         # if data is list turn it to str
-        data['Genres'] = ",".join(eval(data['Genres']))
-        data['Platforms'] = ",".join(eval(data['Platforms']))
+        data['Genres'] = self.fix_toolong_text(",".join(eval(data['Genres'])))
+        data['Platforms'] = self.fix_toolong_text(",".join(eval(data['Platforms'])))
 
         self.view.current_menu.game_title.configure(text=f"{data['Title']}: Datas")
         self.view.current_menu.summary.configure(text=f"{data['Summary']}")
@@ -71,6 +71,19 @@ class GameController:
         self.view.current_menu.rating.configure(text=f"Rating: {data['Rating']}")
         self.view.current_menu.genres.configure(text=f"Genres: {data['Genres']}")
         self.view.current_menu.platform.configure(text=f"Platforms: {data['Platforms']}")
+
+    @staticmethod
+    def fix_toolong_text(data: str):
+        """If the data is too long frame will extend and my layout will broke
+        This method is use to create a new line if the data is too long"""
+        split_data = data.split(",")
+        new_str = []
+        for i in range(len(split_data)):
+            if i % 3 == 0 and i != 0 and len(data) > 38:
+                new_str.append(f"\n{split_data[i]}")
+            else:
+                new_str.append(split_data[i])
+        return ",".join(new_str)
 
 
 class StatController:

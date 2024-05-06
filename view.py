@@ -168,36 +168,30 @@ class GameData(tk.CTkFrame):
         self.title = "Game Data"
         self.controller = controller
 
-        # The summary of gameplay or story
-        self.summary = tk.CTkLabel(self, text="None", font=FONT)
+        # Frame
         self.data_frame = tk.CTkFrame(master=self, fg_color="#2d2d2d")
-        # Title of the current game
+
+        # Database of the game
         self.game_title = tk.CTkLabel(self, text="Please selects the game", font=("Arial", 22))
-
+        self.summary = tk.CTkLabel(self, text="", font=("Arial", 13))
         self.player = tk.CTkLabel(self.data_frame, text="Totals Players: None", font=FONT)
-
         self.rating = tk.CTkLabel(self.data_frame, text="Rating: None", font=FONT)
-
         self.genres = tk.CTkLabel(self.data_frame, text="Genres: None", font=FONT)
-
         self.platform = tk.CTkLabel(self.data_frame, text="Platforms: None", font=FONT)
-
-        self.search_box = None
-
-        self.columnconfigure(0, weight=2, minsize=20)
-        for i in range(4):
-            self.columnconfigure(i + 1, weight=1)
-        self.columnconfigure(5, weight=2, minsize=20)
-
-        for i in range(4):
-            self.rowconfigure(i, weight=1)
-
-        self.rowconfigure(4, weight=2, minsize=40)
 
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
+        self.columnconfigure(0, weight=1, minsize=20)
+        for i in range(4):
+            self.columnconfigure(i + 1, weight=1)
+        self.columnconfigure(5, weight=1, minsize=20)
+
+        for i in range(4):
+            self.rowconfigure(i, weight=1)
+
+        self.rowconfigure(4, weight=1, minsize=40)
 
         search_label = tk.CTkLabel(self, text="Find Game by Title", font=("Arial", 22))
         search_label.grid(row=0, column=1, sticky="ws", pady=20)
@@ -206,19 +200,18 @@ class GameData(tk.CTkFrame):
         summary_label = tk.CTkLabel(self, text="Description of The game", font=("Arial", 22))
         summary_label.grid(row=2, column=1, sticky="nw")
 
-        self.summary.grid(row=3, column=1, sticky="news")
-
         # Use for search the game
-        self.search_box = tk.CTkComboBox(self, values=self.controller.get_game_title(),
-                                         command=lambda event=None: self.controller
-                                         .get_data_of_the_game(self.search_box.get()))
-        
-        self.search_box.grid(row=1, column=1, sticky="new")
+        search_box = tk.CTkComboBox(self, values=self.controller.get_game_title(),
+                                    command=lambda event=None: self.controller
+                                    .get_data_of_the_game(search_box.get()))
 
+        search_box.grid(row=1, column=1, sticky="new")
+
+        # grid at main
         self.game_title.grid(row=0, column=3, sticky="wes", columnspan=3, pady=20)
-
-        # Dataframe for shows values of that game
+        self.summary.grid(row=3, column=1, sticky="news", columnspan=2)
         self.data_frame.grid(row=1, column=3, sticky="news", rowspan=3, columnspan=3, padx=50)
+
         for i in range(5):
             self.data_frame.rowconfigure(i, weight=1)
 
