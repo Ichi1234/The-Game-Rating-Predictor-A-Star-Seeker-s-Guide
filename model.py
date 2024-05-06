@@ -27,7 +27,7 @@ class Model:
         """Convert K (1,000) in csv to be integer"""
         for change in self.df.columns.tolist():
             if change in ['Plays', 'Playing', 'Backlogs', 'Wishlist', 'Lists', 'Reviews']:
-                self.df[change].apply(self.k_destroyer)
+                self.df[change] = self.df[change].apply(self.k_destroyer)
                 self.df[change] = pd.to_numeric(self.df[change], errors='coerce')
 
     def stats(self, column):
