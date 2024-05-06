@@ -65,6 +65,10 @@ class GameController:
         data['Genres'] = self.fix_toolong_text(",".join(eval(data['Genres'])))
         data['Platforms'] = self.fix_toolong_text(",".join(eval(data['Platforms'])))
 
+        # make numerical data look better to present
+        if data['Plays'] > 999:
+            data['Plays'] = str(data['Plays']/1000) + "K"
+
         self.view.current_menu.game_title.configure(text=f"{data['Title']}: Datas")
         self.view.current_menu.summary.configure(text=f"{data['Summary']}")
         self.view.current_menu.player.configure(text=f"Totals Players: {data['Plays']}")
@@ -96,12 +100,13 @@ class StatController:
         self.view.switch_menu("story", StatController(self.view, self.model))
 
     def change_statistic_menu(self, statistic_menu: str):
-        """This method use for change statistic menu"""
+        """This method is use for change statistic menu"""
         self.view.switch_menu(statistic_menu, StatController(self.view, self.model))
 
     def user_select_graph(self, master, x, y):
+        """This method is use for create graph in UserGraph class"""
         user_graph = self.model.create_figure(master, x, y)
-        user_graph.get_tk_widget().grid(row=4, column=3, sticky="e", columnspan=1)
+        user_graph.get_tk_widget().grid(row=0, column=0)
 
     def story_graph(self, which):
         img = tk.CTkImage(light_image=self.model.pull_image(which), size=(300, 300))
@@ -112,7 +117,8 @@ class StatController:
         data = self.model.stats(column)
         self.view.current_menu.database.configure(text=f"Mean = {data['mean']}\nMedian = {data['median']}"
                                                        f"\nS.D. = {data['sd']}\nMin = {data['min']}"
-                                                       f"\nMax = {data['max']}\nVariance = {data['var']}")
+                                                       f"\nMax = {data['max']}\nVariance = {data['var']}"
+                                                       f"\nTypes of Data = {data['type']}")
 
 
 class ForumController:

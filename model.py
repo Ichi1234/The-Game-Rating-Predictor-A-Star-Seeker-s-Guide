@@ -5,7 +5,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from PIL import Image
 
-
 class Model:
     def __init__(self):
         self.df = pd.read_csv('backloggd_games.csv')
@@ -33,7 +32,7 @@ class Model:
     def stats(self, column):
         """Send statistic datas to controller"""
         return {"mean": round(self.df[column].mean(), 3), "median": round(self.df[column].median(), 3),
-                "sd": round(self.df[column].std(), 3),
+                "sd": round(self.df[column].std(), 3), "type": self.df[column].dtypes,
                 "min": self.df[column].min(), "max": self.df[column].max(), "var": round(self.df[column].var(), 3)}
 
     def find_game_data(self, name_of_the_game):
@@ -51,7 +50,13 @@ class Model:
         figure = Figure(figsize=(4, 4))
         ax = figure.subplots()
 
-        s = sns.barplot(x=x, y=y, data=self.df, errorbar=None, ax=ax)
+        if x == "empty_x" and y == "empty_y":
+            empty_df = pd.DataFrame()
+            empty_df[x], empty_df[y] = [], []
+            s = sns.barplot(x=x, y=y, data=empty_df, errorbar=None, ax=ax)
+        else:
+            s = sns.barplot(x=x, y=y, data=self.df, errorbar=None, ax=ax)
+
         s.set_xticklabels([])
         s.set_yticklabels([])
 

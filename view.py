@@ -311,7 +311,8 @@ class StatisticMenu(tk.CTkFrame):
         dataframe.grid(row=1, column=1, sticky="news")
 
         self.database = tk.CTkLabel(dataframe, text="Mean = None\nMedian = None\nS.D. = None\nMin = None"
-                                                    "\nMax = None\nVariance = None", font=("Arial", 25))
+                                                    "\nMax = None\nVariance = None\nType of Data = None",
+                                                    font=("Arial", 25))
         self.database.pack(pady=20)
 
         back_button = tk.CTkButton(self, text="Back")
@@ -359,42 +360,49 @@ class UserGraph(tk.CTkFrame):
         self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
 
+        self.frame = tk.CTkFrame(self, fg_color="transparent")
+
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        for i in range(7):
+        for i in range(6):
             self.columnconfigure(i, weight=1)
         for i in range(5):
             self.rowconfigure(i, weight=1)
 
-        # self.controller.user_select_graph(self, "empty_x", "empty_y")
+        option = {'side': 'left', 'padx': 10, 'pady': 5, 'expand': True, 'fill': 'both'}
 
-        select_x = tk.CTkComboBox(self, values=["Rating", "Plays", "Playing",
-                                                "Backlogs", "Wishlist", "Lists", "Reviews"])
+        attribute_frame = tk.CTkFrame(self, fg_color="transparent")
 
-        select_x.grid(row=0, column=2, sticky="w", pady=20)
+        self.controller.user_select_graph(self.frame, "empty_x", "empty_y")
 
-        select_y = tk.CTkComboBox(self, values=["Rating", "Plays", "Playing", "Backlogs",
-                                                "Wishlist", "Lists", "Reviews"])
+        label_x = tk.CTkLabel(attribute_frame, text="x:", font=FONT)
+        label_x.pack(**option)
 
-        select_y.grid(row=0, column=4, sticky="w", pady=20)
+        select_x = tk.CTkComboBox(attribute_frame, values=["Rating", "Plays", "Playing",
+                                                           "Backlogs", "Wishlist", "Lists", "Reviews"])
+        select_x.pack(**option)
 
-        label_x = tk.CTkLabel(self, text="x:", font=FONT)
-        label_x.grid(row=0, column=1, sticky="e", padx=10)
+        label_y = tk.CTkLabel(attribute_frame, text="y:", font=FONT)
+        label_y.pack(**option)
 
-        label_y = tk.CTkLabel(self, text="y:", font=FONT)
-        label_y.grid(row=0, column=3, sticky="e", padx=10)
+        select_y = tk.CTkComboBox(attribute_frame, values=["Rating", "Plays", "Playing", "Backlogs",
+                                                           "Wishlist", "Lists", "Reviews"])
+        select_y.pack(**option)
+
+        start_button = tk.CTkButton(attribute_frame, text="Create Graph")
+        start_button.pack(**option)
 
         back_button = tk.CTkButton(self, text="Back")
-        back_button.grid(row=4, column=1, sticky="s")
+        back_button.grid(row=4, column=3)
 
-        start_button = tk.CTkButton(self, text="Create Graph")
-        start_button.grid(row=0, column=5, sticky="w", padx=10)
+        attribute_frame.grid(row=0, column=3, sticky="we")
+        self.frame.grid(row=2, column=3, sticky="ns")
 
         back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
         start_button.bind("<Button-1>",
-                          lambda event=None: self.controller.user_select_graph(self, select_x.get(),
+                          lambda event=None: self.controller.user_select_graph(self.frame, select_x.get(),
                                                                                select_y.get()))
 
 
