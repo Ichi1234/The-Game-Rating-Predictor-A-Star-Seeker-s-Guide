@@ -35,7 +35,8 @@ class View:
                      "story": StoryTelling, "distribute": UserGraph, "statistic": StatisticMenu}
 
         self.current_menu = None
-        self.menu_open = None
+        self.menu_button = None
+        self.menu_window = None
         self.title_label = None
 
         self.app.columnconfigure(0, weight=1)
@@ -48,7 +49,7 @@ class View:
         if self.current_menu is not None:
             self.current_menu.destroy()
 
-        if menu_name not in ["login"] and not self.menu_open:
+        if menu_name not in ["login"] and not self.menu_button:
             self.menu_title_creation()
 
         elif menu_name == "menu" and not self.controller:
@@ -64,13 +65,14 @@ class View:
             self.current_menu.grid(row=1, sticky="news", rowspan=2)
             self.title_label.configure(text=self.current_menu.title)
 
+
     def menu_title_creation(self):
         """Create menu label at the top"""
         menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
         menu_label.grid(row=0, sticky="news")
 
-        self.menu_open = tk.CTkButton(menu_label, text="Menu", fg_color="transparent", font=FONT)
-        self.menu_open.pack(side="left", expand=True)
+        self.menu_button = tk.CTkButton(menu_label, text="Menu", fg_color="transparent", font=FONT)
+        self.menu_button.pack(side="left", expand=True)
 
         self.title_label = tk.CTkLabel(menu_label, text="Game Data", fg_color="transparent", font=FONT)
         self.title_label.pack(side="left", padx=100, pady=3, expand=True)
@@ -81,6 +83,31 @@ class View:
         exit_button = tk.CTkButton(menu_label, text="Exit", font=FONT,
                                    command=self.app.closing_the_program, fg_color="transparent")
         exit_button.pack(side="left", expand=True)
+
+    def menu_window_creation(self):
+        self.menu_window = tk.CTkFrame(self.app)
+
+        game_button = tk.CTkButton(self.menu_window, text="Game Data")
+        game_button.pack()
+
+        stat_button = tk.CTkButton(self.menu_window, text="Statistic Data")
+        stat_button.pack()
+
+        forum_button = tk.CTkButton(self.menu_window, text="Forum")
+        forum_button.pack()
+
+        credit_button = tk.CTkButton(self.menu_window, text="About Us")
+        credit_button.pack()
+
+        self.menu_window.grid(row=1, column=0, rowspan=10, sticky="ns")
+        # # Bind Button
+        # game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game", event))
+        # stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat", event))
+        # forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", event))
+        # credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit", event))
+
+
+
 
     def main_loop(self):
         """Loop of the program"""
@@ -97,7 +124,7 @@ class Login(tk.CTkFrame):
         self.rowconfigure(0, weight=1)
         self.controller = controller
 
-        self.__left_frame = tk.CTkFrame(master=self, fg_color="dark blue")
+        self.__left_frame = tk.CTkFrame(master=self, fg_color="#031b70")
         self.__announce = tk.CTkScrollableFrame(master=self.__left_frame)
         self.__data_frame = tk.CTkFrame(master=self, fg_color="#808080")
 
@@ -312,7 +339,7 @@ class StatisticMenu(tk.CTkFrame):
 
         self.database = tk.CTkLabel(dataframe, text="Mean = None\nMedian = None\nS.D. = None\nMin = None"
                                                     "\nMax = None\nVariance = None\nType of Data = None",
-                                                    font=("Arial", 25))
+                                    font=("Arial", 25))
         self.database.pack(pady=20)
 
         back_button = tk.CTkButton(self, text="Back")
@@ -395,7 +422,7 @@ class UserGraph(tk.CTkFrame):
         start_button.pack(**option)
 
         back_button = tk.CTkButton(self, text="Back")
-        back_button.grid(row=4, column=3)
+        back_button.grid(row=4, column=3, pady=10)
 
         attribute_frame.grid(row=0, column=3, sticky="we")
         self.frame.grid(row=2, column=3, sticky="ns")

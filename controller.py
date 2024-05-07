@@ -21,7 +21,11 @@ class Controller:
 
     def menu_title_button(self):
         """method for bind menu button"""
-        self.view.switch_menu("menu", self)
+        if not self.view.menu_window:
+            self.view.menu_window_creation()
+        else:
+            self.view.menu_window.destroy()
+            self.view.menu_window = None
 
 
 class LoginController(Controller):
@@ -36,7 +40,7 @@ class LoginController(Controller):
     def signin(self, event):
         """This method use for login button in Login class"""
         self.view.switch_menu("game", GameController(self.view, self.model))
-        self.view.menu_open.configure(command=self.menu_title_button)
+        self.view.menu_button.configure(command=self.menu_title_button)
 
     def signup(self, event):
         """This method use for signup button in Login class"""
