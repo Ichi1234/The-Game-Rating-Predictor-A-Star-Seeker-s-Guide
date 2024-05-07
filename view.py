@@ -458,8 +458,6 @@ class Forum(tk.CTkFrame):
         self.post_frame.grid(row=1, column=1, sticky="news")
 
 
-
-
 class Credit(tk.CTkFrame):
     """class for About us menu"""
 
