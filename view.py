@@ -59,17 +59,17 @@ class View:
 
         # if it login menu it will grid at the top elif it will grid at 1 because of menu_bar
         if isinstance(self.current_menu, Login):
-            self.current_menu.grid(row=0, sticky="news", rowspan=2)
+            self.current_menu.grid(row=0, column=0, sticky="news", rowspan=2)
         else:
             self.app.rowconfigure(1, weight=2, minsize=500)
-            self.current_menu.grid(row=1, sticky="news", rowspan=2)
+            self.current_menu.grid(row=1, column=0, sticky="news", rowspan=2)
             self.title_label.configure(text=self.current_menu.title)
 
 
     def menu_title_creation(self):
         """Create menu label at the top"""
         menu_label = tk.CTkFrame(master=self.app, fg_color="dark blue")
-        menu_label.grid(row=0, sticky="news")
+        menu_label.grid(row=0, column=0, sticky="news", columnspan=10)
 
         self.menu_button = tk.CTkButton(menu_label, text="Menu", fg_color="transparent", font=FONT)
         self.menu_button.pack(side="left", expand=True)

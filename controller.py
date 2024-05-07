@@ -22,9 +22,14 @@ class Controller:
     def menu_title_button(self):
         """method for bind menu button"""
         if not self.view.menu_window:
+            self.view.app.columnconfigure(0, weight=1)
+            self.view.app.columnconfigure(1, weight=10)
+            self.view.current_menu.grid(row=1, column=1, sticky="news", rowspan=2)
             self.view.menu_window_creation()
         else:
             self.view.menu_window.destroy()
+            self.view.app.columnconfigure(1, weight=0)
+            self.view.current_menu.grid(row=1, column=0, sticky="news", rowspan=2)
             self.view.menu_window = None
 
 
