@@ -86,6 +86,7 @@ class View:
         exit_button.pack(side="left", expand=True)
 
     def menu_window_creation(self):
+        """When user click at menu. Menu window will pop up on the left side"""
         button_option = {'font': ('Arial', 13), 'fg_color': "transparent", 'text_color': ("black", "white")}
         option = {'pady': 20, 'fill': "both", 'expand': True}
 
@@ -442,11 +443,21 @@ class Forum(tk.CTkFrame):
         self.title = "Forum"
         self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
+
+        self.post_frame = tk.CTkScrollableFrame(self)
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        pass
+        for i in range(3):
+            self.rowconfigure(i, weight=1)
+            self.columnconfigure(i, weight=1)
+
+        new_post = tk.CTkButton(self, text="New post", corner_radius=360, height=40)
+        new_post.grid(row=0, column=1, sticky="es", pady=5)
+        self.post_frame.grid(row=1, column=1, sticky="news")
+
+
 
 
 class Credit(tk.CTkFrame):

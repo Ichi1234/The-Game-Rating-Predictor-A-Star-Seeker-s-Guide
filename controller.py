@@ -11,6 +11,7 @@ class Controller:
                      "forum": ForumController, "credit": CreditController}
 
     def dark_mode(self):
+        """Switch to dark mode or light mode"""
         if self.view.dark_mode.get():
             tk.set_appearance_mode("dark")
         else:
