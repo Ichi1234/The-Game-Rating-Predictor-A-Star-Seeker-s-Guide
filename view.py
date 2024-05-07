@@ -31,13 +31,14 @@ class View:
         self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
-                     "forum": Forum, "credit": Credit, "menu": MenuBar,
+                     "forum": Forum, "credit": Credit,
                      "story": StoryTelling, "distribute": UserGraph, "statistic": StatisticMenu}
 
         self.current_menu = None
         self.menu_button = None
         self.menu_window = None
         self.title_label = None
+        self.dark_mode = None
 
         self.app.columnconfigure(0, weight=1)
         self.app.rowconfigure(0, weight=1, minsize=70)
@@ -61,6 +62,8 @@ class View:
             self.app.rowconfigure(1, weight=2, minsize=500)
             self.current_menu.grid(row=1, column=0, sticky="news", rowspan=2)
             self.title_label.configure(text=self.current_menu.title)
+            if self.controller:
+                self.dark_mode.configure(command=self.controller.dark_mode)
 
     def menu_title_creation(self):
         """Create menu label at the top"""
@@ -70,21 +73,23 @@ class View:
         self.menu_button = tk.CTkButton(menu_label, text="Menu", fg_color="transparent", font=FONT)
         self.menu_button.pack(side="left", expand=True)
 
-        self.title_label = tk.CTkLabel(menu_label, text="Game Data", fg_color="transparent", font=FONT)
+        self.title_label = tk.CTkLabel(menu_label, text="Game Data",
+                                       fg_color="transparent", font=FONT, text_color="white")
         self.title_label.pack(side="left", padx=100, pady=3, expand=True)
 
-        checkbox = tk.CTkSwitch(master=menu_label, text="Light Mode", font=FONT)
-        checkbox.pack(side="left", expand=True)
+        self.dark_mode = tk.CTkSwitch(master=menu_label, text="Dark Mode", font=FONT, text_color="white")
+        self.dark_mode.select()
+        self.dark_mode.pack(side="left", expand=True)
 
         exit_button = tk.CTkButton(menu_label, text="Exit", font=FONT,
                                    command=self.app.closing_the_program, fg_color="transparent")
         exit_button.pack(side="left", expand=True)
 
     def menu_window_creation(self):
-        button_option = {'font': ('Arial', 13), 'fg_color': "transparent"}
+        button_option = {'font': ('Arial', 13), 'fg_color': "transparent", 'text_color': ("black", "white")}
         option = {'pady': 20, 'fill': "both", 'expand': True}
 
-        self.menu_window = tk.CTkFrame(self.app, fg_color="#252525")
+        self.menu_window = tk.CTkFrame(self.app, fg_color=("#e8e8e8", "#252525"))
 
         game_button = tk.CTkButton(self.menu_window, text="Game Data", **button_option)
         game_button.pack(**option)
@@ -187,12 +192,12 @@ class GameData(tk.CTkFrame):
 
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.configure(fg_color=FRAME_COLOR)  # TODO light mode - dark mode
+        self.configure(fg_color=FRAME_COLOR)
         self.title = "Game Data"
         self.controller = controller
 
         # Frame
-        self.data_frame = tk.CTkFrame(master=self, fg_color="#2d2d2d")
+        self.data_frame = tk.CTkFrame(master=self, fg_color=("#a5a5a5", "#2d2d2d"))
 
         # Database of the game
         self.game_title = tk.CTkLabel(self, text="Please selects the game", font=("Arial", 22))
@@ -330,7 +335,7 @@ class StatisticMenu(tk.CTkFrame):
 
         select_attribute.grid(row=0, column=1, padx=120)
 
-        dataframe = tk.CTkFrame(self, fg_color="#2d2d2d")
+        dataframe = tk.CTkFrame(self, fg_color=("#a5a5a5", "#2d2d2d"))
         dataframe.grid(row=1, column=1, sticky="news")
 
         self.database = tk.CTkLabel(dataframe, text="Mean = None\nMedian = None\nS.D. = None\nMin = None"

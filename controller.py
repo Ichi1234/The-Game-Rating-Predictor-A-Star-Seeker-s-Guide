@@ -10,6 +10,12 @@ class Controller:
         self.menu = {"login": LoginController, "game": GameController, "stat": StatController,
                      "forum": ForumController, "credit": CreditController}
 
+    def dark_mode(self):
+        if self.view.dark_mode.get():
+            tk.set_appearance_mode("dark")
+        else:
+            tk.set_appearance_mode("light")
+
     def start_program(self):
         """Start the Program"""
         self.view.switch_menu("login", LoginController(self.view, self.model))
@@ -37,7 +43,6 @@ class Controller:
             self.view.menu_window = None
 
 
-
 class LoginController(Controller):
     """Controller class for login class"""
 
@@ -49,9 +54,9 @@ class LoginController(Controller):
 
     def signin(self, event):
         """This method use for login button in Login class"""
+        self.view.controller = self
         self.view.switch_menu("game", GameController(self.view, self.model))
         self.view.menu_button.configure(command=self.menu_title_button)
-        self.view.controller = self
 
     def signup(self, event):
         """This method use for signup button in Login class"""
@@ -82,7 +87,7 @@ class GameController:
 
         # make numerical data look better to present
         if data['Plays'] > 999:
-            data['Plays'] = str(data['Plays']/1000) + "K"
+            data['Plays'] = str(data['Plays'] / 1000) + "K"
 
         self.view.current_menu.game_title.configure(text=f"{data['Title']}: Datas")
         self.view.current_menu.summary.configure(text=f"{data['Summary']}")
