@@ -2,7 +2,7 @@ from PIL import Image
 import customtkinter as tk
 
 FONT = ("Arial", 16)
-FRAME_COLOR = "#202020"
+FRAME_COLOR = ("white", "#202020")
 
 
 class App(tk.CTk):
@@ -52,9 +52,6 @@ class View:
         if menu_name not in ["login"] and not self.menu_button:
             self.menu_title_creation()
 
-        elif menu_name == "menu" and not self.controller:
-            self.controller = controller
-
         self.current_menu = self.menu[menu_name](self.app, controller)
 
         # if it login menu it will grid at the top elif it will grid at 1 because of menu_bar
@@ -64,7 +61,6 @@ class View:
             self.app.rowconfigure(1, weight=2, minsize=500)
             self.current_menu.grid(row=1, column=0, sticky="news", rowspan=2)
             self.title_label.configure(text=self.current_menu.title)
-
 
     def menu_title_creation(self):
         """Create menu label at the top"""
@@ -85,29 +81,29 @@ class View:
         exit_button.pack(side="left", expand=True)
 
     def menu_window_creation(self):
-        self.menu_window = tk.CTkFrame(self.app)
+        button_option = {'font': ('Arial', 13), 'fg_color': "transparent"}
+        option = {'pady': 20, 'fill': "both", 'expand': True}
 
-        game_button = tk.CTkButton(self.menu_window, text="Game Data")
-        game_button.pack()
+        self.menu_window = tk.CTkFrame(self.app, fg_color="#252525")
 
-        stat_button = tk.CTkButton(self.menu_window, text="Statistic Data")
-        stat_button.pack()
+        game_button = tk.CTkButton(self.menu_window, text="Game Data", **button_option)
+        game_button.pack(**option)
 
-        forum_button = tk.CTkButton(self.menu_window, text="Forum")
-        forum_button.pack()
+        stat_button = tk.CTkButton(self.menu_window, text="Statistic Data", **button_option)
+        stat_button.pack(**option)
 
-        credit_button = tk.CTkButton(self.menu_window, text="About Us")
-        credit_button.pack()
+        forum_button = tk.CTkButton(self.menu_window, text="Forum", **button_option)
+        forum_button.pack(**option)
 
-        self.menu_window.grid(row=1, column=0, rowspan=10, sticky="ns")
-        # # Bind Button
-        # game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game", event))
-        # stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat", event))
-        # forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", event))
-        # credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit", event))
+        credit_button = tk.CTkButton(self.menu_window, text="About Us", **button_option)
+        credit_button.pack(**option)
 
-
-
+        self.menu_window.grid(row=1, column=0, rowspan=10, sticky="new")
+        # Bind Button
+        game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game", event))
+        stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat", event))
+        forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", event))
+        credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit", event))
 
     def main_loop(self):
         """Loop of the program"""

@@ -17,6 +17,10 @@ class Controller:
 
     def menu_button(self, menu_name, event):
         """method for bind menu button"""
+        self.view.menu_window.destroy()
+        self.view.app.columnconfigure(1, weight=0)
+        self.view.current_menu.grid(row=1, column=0, sticky="news", rowspan=2)
+        self.view.menu_window = None
         self.view.switch_menu(menu_name, self.menu[menu_name](self.view, self.model))
 
     def menu_title_button(self):
@@ -33,6 +37,7 @@ class Controller:
             self.view.menu_window = None
 
 
+
 class LoginController(Controller):
     """Controller class for login class"""
 
@@ -46,6 +51,7 @@ class LoginController(Controller):
         """This method use for login button in Login class"""
         self.view.switch_menu("game", GameController(self.view, self.model))
         self.view.menu_button.configure(command=self.menu_title_button)
+        self.view.controller = self
 
     def signup(self, event):
         """This method use for signup button in Login class"""
