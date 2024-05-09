@@ -31,7 +31,7 @@ class View:
         self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
-                     "forum": Forum, "credit": Credit,
+                     "forum": Forum, "credit": Credit, "up": SignUp,
                      "story": StoryTelling, "distribute": UserGraph, "statistic": StatisticMenu}
 
         self.current_menu = None
@@ -124,6 +124,7 @@ class Login(tk.CTkFrame):
         self.columnconfigure(0, weight=2)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
+        self.app = master
         self.controller = controller
 
         self.__left_frame = tk.CTkFrame(master=self, fg_color="#031b70")
@@ -162,7 +163,7 @@ class Login(tk.CTkFrame):
         login_button.grid(row=3, column=1, sticky="n")
 
         # Bind Button
-        signup_button.bind("<Button-1>", self.controller.signup)
+        signup_button.bind("<Button-1>", lambda event=None: self.controller.signup(self.app, event))
         login_button.bind("<Button-1>", self.controller.signin)
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
@@ -186,6 +187,50 @@ class Login(tk.CTkFrame):
         """This method use for insert text to announce"""
         title = tk.CTkLabel(self.__announce, text="Announcement", font=("Arial", 20))
         title.grid(row=0, column=0)
+
+
+class SignUp(tk.CTkToplevel):
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.app = master
+        self.controller = controller
+        self.title("Sign Up")
+        self.geometry("600x400")
+        self.attributes("-topmost", True)
+        self.resizable(False, False)
+
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        sign_up_frame = tk.CTkFrame(self, fg_color="#808080")
+        sign_up_frame.pack(expand=True, fill="both")
+
+        # Username Label and Entry
+        user_label = tk.CTkLabel(sign_up_frame, text="Username", font=FONT)
+        user_label.grid(row=0, column=0, sticky="sw", padx=15)
+        user_entry = tk.CTkEntry(sign_up_frame, placeholder_text="Type your username....", font=FONT,
+                                 width=200)
+        user_entry.grid(row=1, column=0, sticky="new", padx=15, columnspan=10)
+
+        # Password Label and Entry
+        pass_label = tk.CTkLabel(sign_up_frame, text="Password", font=FONT)
+        pass_label.grid(row=1, column=0, sticky="sw", padx=15)
+        pass_entry = tk.CTkEntry(sign_up_frame, placeholder_text="Type your password....", font=FONT,
+                                 width=200)
+        pass_entry.grid(row=2, column=0, sticky="new", padx=15, columnspan=10)
+
+        # Signup and Sign in Button
+        signup_button = tk.CTkButton(sign_up_frame, text="Sign Up", height=30)
+        signup_button.grid(row=2, column=2, sticky="s")
+
+        # Bind Button
+        signup_button.bind("<Button-1>", lambda event=None: self.controller.signup(self.app, event))
+
+        for i in range(4):
+            sign_up_frame.rowconfigure(i, weight=1)
+            sign_up_frame.columnconfigure(i, weight=1)
+        sign_up_frame.columnconfigure(5, weight=3)
 
 
 class GameData(tk.CTkFrame):

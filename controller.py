@@ -59,9 +59,9 @@ class LoginController(Controller):
         self.view.switch_menu("game", GameController(self.view, self.model))
         self.view.menu_button.configure(command=self.menu_title_button)
 
-    def signup(self, event):
+    def signup(self, master, event):
         """This method use for signup button in Login class"""
-        print("UwU")
+        self.view.menu['up'](master, self)
 
 
 class GameController:
