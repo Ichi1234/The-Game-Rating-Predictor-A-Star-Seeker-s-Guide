@@ -129,8 +129,13 @@ class StatController:
         user_graph = self.model.create_figure(master, x, y)
         user_graph.get_tk_widget().grid(row=0, column=0)
 
+    def pull_img_model(self, img_name: str, size: tuple = (450, 300)):
+        """Pull image from database"""
+        return tk.CTkImage(light_image=self.model.pull_image(img_name), size=size)
+
     def story_graph(self, which):
-        img = tk.CTkImage(light_image=self.model.pull_image(which), size=(300, 300))
+        """Apply image to StoryTelling Class"""
+        img = self.pull_img_model(which)
         self.view.current_menu.graph.configure(image=img)
 
     def get_statistic(self, column: str):
