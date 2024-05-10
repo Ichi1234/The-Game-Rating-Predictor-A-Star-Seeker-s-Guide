@@ -27,8 +27,9 @@ class Model:
             self.forum_data = pd.read_csv('forum.csv')
             # handle row error by input waiting-for-user-to-comment
             if len(new_post) != len(self.forum_data.columns):
-                for i in range(abs(len(self.forum_data.columns) - len(new_post))):
-                    new_post.update({str(i): "waiting-for-user-to-comment"})
+                for i in range(int(self.forum_data.columns[-1][-1]) + 1):
+                    new_post.update({f"com_{i}": "waiting-for-user-to-comment"})
+                    new_post.update({f"user_{i}": "waiting-for-user-to-comment"})
             self.forum_data._append(new_post, ignore_index=True).to_csv('forum.csv', index=False)
 
             self.forum_data = pd.read_csv('forum.csv')
@@ -56,12 +57,32 @@ class Model:
         # except ValueError:
         #     return False
 
-    def update_csv(self, csv_name: str, value: dict):
+    def update_csv(self, csv_name: str, value: dict, value2=None):
         """Update target csv file"""
         if csv_name == "pass":
             try:
                 self.password._append(value, ignore_index=True).to_csv('user_password.csv', index=False)
                 self.password = pd.read_csv('user_password.csv')
+                return True
+            except PermissionError:
+                return False
+        elif csv_name == "forum":
+            try:
+                self.forum_data = pd.read_csv('forum.csv')
+                if len(value) != len(self.forum_data.columns):
+                    handle_error_list = ["waiting-for-user-to-comment" for _ in range(len(self.forum_data))]
+                    if self.forum_data.columns[-1] == "Name":
+                        self.forum_data["com_0"] = handle_error_list
+                        self.forum_data["user_0"] = handle_error_list
+
+                    else:
+                        self.forum_data[value2[0]] = handle_error_list
+                        self.forum_data[value2[1]] = handle_error_list
+                self.forum_data.loc[self.forum_data["Title"] == value["Title"], value2[0]] = value2[2][0]
+                self.forum_data.loc[self.forum_data["Title"] == value["Title"], value2[1]] = value2[2][1]
+
+                self.forum_data.to_csv('forum.csv', index=False)
+                self.forum_data = pd.read_csv('forum.csv')
                 return True
             except PermissionError:
                 return False

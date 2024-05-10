@@ -213,9 +213,30 @@ class ForumController:
         self.view.forum_data = data
         self.view.switch_menu("UserForum", ForumController(self.view, self.model))
 
-    def new_comment(self, comment: str, event):
+    def new_comment(self, comment: str, data: dict, event):
         """Add new comment to database and display it"""
         self.view.current_menu.new_comment_text.delete(0, tk.END)
+
+        update = False
+        list_of_data = []
+        for key, val in data.items():
+            if val == "waiting-for-user-to-comment":
+                data[key] = comment
+                data[f"user_{key[-1]}"] = self.model.user
+                list_of_data = [key, f"user_{key[-1]}", [comment, self.model.user]]
+                update = True
+                break
+        if not update:
+            key = [i for i in data.keys()]
+            try:
+                data.update(
+                    {f"com_{int(key[-1][-1]) + 1}": comment, f"user_{int(key[-1][-1]) + 1}": self.model.user})
+                list_of_data = [f"com_{int(key[-1][-1])}", f"user_{int(key[-1][-1])}", [comment, self.model.user]]
+            except ValueError:
+                data.update({"com_0": comment, "user_0": self.model.user})
+                list_of_data = ["com_0", "user_0", [comment, self.model.user]]
+
+        self.model.update_csv("forum", data, list_of_data)
 
 
 class CreditController:

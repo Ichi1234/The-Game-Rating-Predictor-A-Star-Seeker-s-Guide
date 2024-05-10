@@ -563,25 +563,35 @@ class SelectedForum(tk.CTkFrame):
 
         frame_for_comment = tk.CTkScrollableFrame(self)
         frame_for_comment.grid(row=1, column=0, sticky="news")
-        for comment in self.list_data:
+
+        user_name = []
+        user_comment = []
+        for i in range(len(self.list_data)):
+            if i % 2 == 0:
+                user_comment.append(self.list_data[i])
+            else:
+                user_name.append(self.list_data[i])
+
+        for comment in range(len(user_name)):
             comment_frame = tk.CTkFrame(frame_for_comment)
             comment_frame.pack(fill="both", expand=True)
             title_frame.columnconfigure(0, weight=1)
 
-            if eval(comment[1]) == "waiting-for-user-to-comment":
+            if user_comment[comment] == "waiting-for-user-to-comment":
                 break
             else:
-                who_comment = tk.CTkLabel(comment_frame, text=eval(comment[1]), font=FONT)
+                who_comment = tk.CTkLabel(comment_frame, text=user_name[comment], font=FONT)
                 who_comment.grid(column=0, columnspan=10, sticky="new")
 
-                add_comment = tk.CTkLabel(comment_frame, text=eval(comment[0]), font=FONT)
+                add_comment = tk.CTkLabel(comment_frame, text=user_comment[comment], font=FONT)
                 add_comment.grid(column=0, columnspan=10, sticky="se", padx=20)
 
         self.new_comment_text.grid(row=2, sticky="news", column=0, pady=5)
 
         # Bind Button
         self.new_comment_text.bind("<Return>",
-                                   lambda event=None: self.controller.new_comment(self.new_comment_text.get(), event))
+                                   lambda event=None: self.controller.new_comment(self.new_comment_text.get(),
+                                                                                  self.data, event))
 
 
 class Credit(tk.CTkFrame):
