@@ -31,8 +31,9 @@ class View:
         self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
-                     "forum": Forum, "credit": Credit, "up": SignUp, "NewPost": NewPostCreation,
+                     "forum": Forum, "credit": Credit, "up": SignUp, "UserForum": SelectedForum,
                      "story": StoryTelling, "distribute": UserGraph, "statistic": StatisticMenu}
+        self.forum_data = {}
 
         self.current_menu = None
         self.menu_button = None
@@ -53,7 +54,11 @@ class View:
         if menu_name not in ["login"] and not self.menu_button:
             self.menu_title_creation()
 
-        self.current_menu = self.menu[menu_name](self.app, controller)
+        # send the forum data if it SelectedForum class
+        if menu_name == "UserForum":
+            self.current_menu = self.menu[menu_name](self.app, controller, self.forum_data)
+        else:
+            self.current_menu = self.menu[menu_name](self.app, controller)
 
         # if it login menu it will grid at the top elif it will grid at 1 because of menu_bar
         if isinstance(self.current_menu, Login):
@@ -524,38 +529,59 @@ class Forum(tk.CTkFrame):
                                                                                        self, event))
 
 
-class NewPostCreation(tk.CTkToplevel):
-    def __init__(self, master, controller, *args, **kwargs):
+class SelectedForum(tk.CTkFrame):
+    def __init__(self, master, controller, data, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.app = master
+        self.title = "Selected Forum"
+        self.configure(fg_color=FRAME_COLOR)
         self.controller = controller
-        self.title("Sign Up")
-        self.geometry("600x400")
-        self.attributes("-topmost", True)
-        self.resizable(False, False)
 
-        self.post_title = tk.StringVar()
+        self.data = data
+        self.list_data = list(self.data.values())[2:]
+
+        self.new_comment_text = tk.CTkEntry(self, placeholder_text="Send a message (PRESS ENTER)")
 
         self.init_components()
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        post_frame = tk.CTkFrame(self)
-        post_frame.pack()
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=5, minsize=300)
+        self.rowconfigure(2, weight=1)
 
-        # Username Label and Entry
-        post_label = tk.CTkLabel(post_frame, text="Post Title: ", font=FONT)
-        post_label.pack(side="left")
+        self.columnconfigure(0, weight=1)
 
-        user_entry = tk.CTkEntry(post_frame, font=FONT,
-                                 width=200, textvariable=self.post_title)
-        user_entry.pack(side="left")
+        title_frame = tk.CTkFrame(self, fg_color=("white", "#343434"))
+        title_frame.grid(row=0, sticky="news", column=0, pady=2)
+        title_frame.columnconfigure(0, weight=1)
 
-        signup_button = tk.CTkButton(post_label, text="Sign Up", height=30)
-        signup_button.pack()
+        title = tk.CTkLabel(title_frame, text=self.data["Title"], font=("Arial", 30))
+        title.grid(column=0, columnspan=10, sticky="new", pady=10)
+
+        writer = tk.CTkLabel(title_frame, text=f"-{self.data['Name']}-", font=("Arial", 20))
+        writer.grid(column=0, columnspan=10, sticky="se")
+
+        frame_for_comment = tk.CTkScrollableFrame(self)
+        frame_for_comment.grid(row=1, column=0, sticky="news")
+        for comment in self.list_data:
+            comment_frame = tk.CTkFrame(frame_for_comment)
+            comment_frame.pack(fill="both", expand=True)
+            title_frame.columnconfigure(0, weight=1)
+
+            if eval(comment[1]) == "waiting-for-user-to-comment":
+                break
+            else:
+                who_comment = tk.CTkLabel(comment_frame, text=eval(comment[1]), font=FONT)
+                who_comment.grid(column=0, columnspan=10, sticky="new")
+
+                add_comment = tk.CTkLabel(comment_frame, text=eval(comment[0]), font=FONT)
+                add_comment.grid(column=0, columnspan=10, sticky="se", padx=20)
+
+        self.new_comment_text.grid(row=2, sticky="news", column=0, pady=5)
 
         # Bind Button
-        signup_button.bind("<Button-1>", lambda event=None: self.controller.create_new_post(user_entry.get()))
+        self.new_comment_text.bind("<Return>",
+                                   lambda event=None: self.controller.new_comment(self.new_comment_text.get(), event))
 
 
 class Credit(tk.CTkFrame):

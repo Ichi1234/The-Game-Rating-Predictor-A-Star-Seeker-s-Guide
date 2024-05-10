@@ -186,7 +186,9 @@ class ForumController:
 
                 new_frame = tk.CTkFrame(master.post_frame)
                 new_frame.columnconfigure(0, weight=1)
-                button = tk.CTkButton(new_frame, text=forum_data_dict[-1]["Title"], anchor="w")
+                button = tk.CTkButton(new_frame, text=forum_data_dict[-1]["Title"], anchor="w",
+                                      command=lambda data=forum_data_dict[-1]: self.select_forum(data))
+
                 user_label = tk.CTkLabel(new_frame, text=f"-{forum_data_dict[-1]['Name']}-")
                 button.grid(column=0, columnspan=10, sticky="new")
                 user_label.grid(column=0, columnspan=10, sticky="se")
@@ -199,11 +201,21 @@ class ForumController:
         for data_dict in forum_data_dict:
             new_frame = tk.CTkFrame(master.post_frame)
             new_frame.columnconfigure(0, weight=1)
-            button = tk.CTkButton(new_frame, text=data_dict["Title"], anchor="w")
+            button = tk.CTkButton(new_frame, text=data_dict["Title"], anchor="w",
+                                  command=lambda data=data_dict: self.select_forum(data))
             user_label = tk.CTkLabel(new_frame, text=f"-{data_dict['Name']}-")
             button.grid(column=0, columnspan=10, sticky="new")
             user_label.grid(column=0, columnspan=10, sticky="se")
             new_frame.pack(fill="both", expand=True)
+
+    def select_forum(self, data: dict):
+        """switch window to selected forum"""
+        self.view.forum_data = data
+        self.view.switch_menu("UserForum", ForumController(self.view, self.model))
+
+    def new_comment(self, comment: str, event):
+        """Add new comment to database and display it"""
+        self.view.current_menu.new_comment_text.delete(0, tk.END)
 
 
 class CreditController:
