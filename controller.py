@@ -172,13 +172,24 @@ class ForumController:
         self.view = view
         self.model = model
 
-    def create_new_post(self, post_title: str, event):
+    def create_new_post(self, post_title: str, master, event):
         """Use for create new forum post"""
         if not post_title:
             CTkMessagebox(title="Error", message="Please input something for your post title.", icon="cancel")
         else:
             self.view.current_menu.user_entry.delete(0, tk.END)
             update = self.model.new_post(post_title)
+
+            forum_data_list = self.model.show_post()
+            for forum_data in forum_data_list:
+                for i in range(len(forum_data)):
+                    print(forum_data_list)
+                    new_frame = tk.CTkFrame(master.post_frame)
+                    button = tk.CTkButton(new_frame, text=forum_data_list[0])
+                    user_label = tk.CTkLabel(new_frame, text=f"-{forum_data_list[1]}-")
+                    button.grid(sticky="new")
+                    user_label.grid(sticky="se")
+                    new_frame.pack()
             if not update:
                 CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
 

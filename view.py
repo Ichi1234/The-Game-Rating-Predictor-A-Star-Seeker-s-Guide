@@ -518,7 +518,8 @@ class Forum(tk.CTkFrame):
         new_post.pack(side="left", padx=10)
 
         self.post_frame.grid(row=1, column=1, sticky="news")
-        new_post.bind("<Button-1>", lambda event=None: self.controller.create_new_post(self.user_entry.get(), event))
+        new_post.bind("<Button-1>", lambda event=None: self.controller.create_new_post(self.user_entry.get(),
+                                                                                       self, event))
 
 
 class NewPostCreation(tk.CTkToplevel):
