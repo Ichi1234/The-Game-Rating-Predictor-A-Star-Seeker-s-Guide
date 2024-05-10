@@ -136,12 +136,11 @@ class StatController:
         self.view = view
         self.model = model
 
-    def story_telling(self, event):
-        """This method use for story button in Statistic class"""
-        self.view.switch_menu("story", StatController(self.view, self.model))
-
     def change_statistic_menu(self, statistic_menu: str):
         """This method is use for change statistic menu"""
+        self.view.app.columnconfigure(1, weight=0)
+        self.view.current_menu.grid(row=1, column=0, sticky="news", rowspan=2)
+        self.view.menu_window = None
         self.view.switch_menu(statistic_menu, StatController(self.view, self.model))
 
     def user_select_graph(self, master, x, y):
@@ -180,18 +179,31 @@ class ForumController:
             self.view.current_menu.user_entry.delete(0, tk.END)
             update = self.model.new_post(post_title)
 
-            forum_data_list = self.model.show_post()
-            for forum_data in forum_data_list:
-                for i in range(len(forum_data)):
-                    print(forum_data_list)
-                    new_frame = tk.CTkFrame(master.post_frame)
-                    button = tk.CTkButton(new_frame, text=forum_data_list[0])
-                    user_label = tk.CTkLabel(new_frame, text=f"-{forum_data_list[1]}-")
-                    button.grid(sticky="new")
-                    user_label.grid(sticky="se")
-                    new_frame.pack()
             if not update:
                 CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+            else:
+                forum_data_dict = self.model.show_post()
+
+                new_frame = tk.CTkFrame(master.post_frame)
+                new_frame.columnconfigure(0, weight=1)
+                button = tk.CTkButton(new_frame, text=forum_data_dict[-1]["Title"], anchor="w")
+                user_label = tk.CTkLabel(new_frame, text=f"-{forum_data_dict[-1]['Name']}-")
+                button.grid(column=0, columnspan=10, sticky="new")
+                user_label.grid(column=0, columnspan=10, sticky="se")
+                new_frame.pack(fill="both", expand=True)
+
+    def display_all_forum(self, master):
+        """Pack every forum from database"""
+        forum_data_dict = self.model.show_post()
+
+        for data_dict in forum_data_dict:
+            new_frame = tk.CTkFrame(master.post_frame)
+            new_frame.columnconfigure(0, weight=1)
+            button = tk.CTkButton(new_frame, text=data_dict["Title"], anchor="w")
+            user_label = tk.CTkLabel(new_frame, text=f"-{data_dict['Name']}-")
+            button.grid(column=0, columnspan=10, sticky="new")
+            user_label.grid(column=0, columnspan=10, sticky="se")
+            new_frame.pack(fill="both", expand=True)
 
 
 class CreditController:

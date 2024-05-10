@@ -504,6 +504,8 @@ class Forum(tk.CTkFrame):
                                       width=200, placeholder_text="Insert new post title....")
         self.init_components()
 
+        self.controller.display_all_forum(self)
+
     def init_components(self) -> None:
         """Create components and layout the UI."""
         for i in range(3):

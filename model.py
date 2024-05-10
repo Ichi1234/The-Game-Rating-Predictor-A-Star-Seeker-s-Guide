@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from PIL import Image
 
+
 class Model:
     def __init__(self):
         self.df = pd.read_csv('backloggd_games.csv')
@@ -24,7 +25,6 @@ class Model:
 
         try:
             self.forum_data = pd.read_csv('forum.csv')
-            print(len(new_post))
             # handle row error by input waiting-for-user-to-comment
             if len(new_post) != len(self.forum_data.columns):
                 for i in range(abs(len(self.forum_data.columns) - len(new_post))):
@@ -40,7 +40,7 @@ class Model:
     def show_post(self):
         """Show all the available code to user"""
         self.forum_data = pd.read_csv('forum.csv')
-        return self.forum_data.values.tolist()
+        return [{k: v[i] for k, v in self.forum_data.items()} for i in range(len(self.forum_data))]
 
     def check_password(self, user, password):
         """Is the password correct?"""
