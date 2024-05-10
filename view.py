@@ -164,7 +164,8 @@ class Login(tk.CTkFrame):
 
         # Bind Button
         signup_button.bind("<Button-1>", lambda event=None: self.controller.signup(self.app, event))
-        login_button.bind("<Button-1>", self.controller.signin)
+        login_button.bind("<Button-1>", lambda event=None: self.controller.signin(user_entry.get(),
+                                                                                  pass_entry.get(), event))
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
@@ -210,16 +211,16 @@ class SignUp(tk.CTkToplevel):
         sign_up_frame.pack(expand=True, fill="both")
 
         # Username Label and Entry
-        user_label = tk.CTkLabel(sign_up_frame, text="Username", font=FONT)
+        user_label = tk.CTkLabel(sign_up_frame, text="New Username", font=FONT)
         user_label.grid(row=0, column=0, sticky="sw", padx=15)
-        user_entry = tk.CTkEntry(sign_up_frame, placeholder_text="Type your username....", font=FONT,
+        user_entry = tk.CTkEntry(sign_up_frame, font=FONT,
                                  width=200, textvariable=self.user_name)
         user_entry.grid(row=1, column=0, sticky="new", padx=15, columnspan=10)
 
         # Password Label and Entry
-        pass_label = tk.CTkLabel(sign_up_frame, text="Password", font=FONT)
+        pass_label = tk.CTkLabel(sign_up_frame, text="New Password", font=FONT)
         pass_label.grid(row=1, column=0, sticky="sw", padx=15)
-        pass_entry = tk.CTkEntry(sign_up_frame, placeholder_text="Type your password....", font=FONT,
+        pass_entry = tk.CTkEntry(sign_up_frame, font=FONT,
                                  width=200, textvariable=self.password)
         pass_entry.grid(row=2, column=0, sticky="new", padx=15, columnspan=10)
 

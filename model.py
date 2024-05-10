@@ -18,7 +18,20 @@ class Model:
     def game_title(self):
         return self.df["Title"].values.tolist()
 
+    def check_password(self, user, password):
+        """Is the password correct?"""
+        try:
+            who = self.password[self.password['Username'] == user]
+            if who.empty:
+                return False
+            else:
+                return password in str(who['Password'].iloc[0])
+
+        except ValueError:
+            return False
+
     def update_csv(self, csv_name: str, value: dict):
+        """Update target csv file"""
         if csv_name == "pass":
             try:
                 self.password._append(value, ignore_index=True).to_csv('user_password.csv', index=False)
@@ -26,6 +39,7 @@ class Model:
                 return True
             except PermissionError:
                 return False
+
     @staticmethod
     def k_destroyer(val):
         """Remove K in csv and *1000 to the value which have K"""

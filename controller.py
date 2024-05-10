@@ -54,11 +54,17 @@ class LoginController(Controller):
         self.view = view
         self.model = model
 
-    def signin(self, event):
+    def signin(self, user, password, event):
         """This method use for login button in Login class"""
-        self.view.controller = self
-        self.view.switch_menu("game", GameController(self.view, self.model))
-        self.view.menu_button.configure(command=self.menu_title_button)
+        if not user or not password:
+            CTkMessagebox(title="Error", message="Invalid Username or Password.", icon="cancel")
+        else:
+            if self.model.check_password(user, password):
+                self.view.controller = self
+                self.view.switch_menu("game", GameController(self.view, self.model))
+                self.view.menu_button.configure(command=self.menu_title_button)
+            else:
+                CTkMessagebox(title="Error", message="Your Username or Password is wrong.", icon="cancel")
 
     def signup(self, master, event):
         """This method use for signup button in Login class"""
@@ -72,9 +78,10 @@ class LoginController(Controller):
             update = self.model.update_csv("pass", {'Username': user, 'Password': password})
             if not update:
                 CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
-
-
-
+            else:
+                CTkMessagebox(title="Success",
+                              message="Congratulations, your account has been successfully created."
+                                      "\nPlease close this window.", icon="check")
 
 
 class GameController:
