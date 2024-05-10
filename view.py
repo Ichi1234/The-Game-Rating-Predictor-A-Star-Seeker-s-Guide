@@ -31,7 +31,7 @@ class View:
         self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
-                     "forum": Forum, "credit": Credit, "up": SignUp,
+                     "forum": Forum, "credit": Credit, "up": SignUp, "NewPost": NewPostCreation,
                      "story": StoryTelling, "distribute": UserGraph, "statistic": StatisticMenu}
 
         self.current_menu = None
@@ -229,7 +229,7 @@ class SignUp(tk.CTkToplevel):
 
         # Bind Button
         signup_button.bind("<Button-1>", lambda event=None: self.controller.add_new_people(user_entry.get(),
-                           pass_entry.get()))
+                                                                                           pass_entry.get()))
 
         for i in range(4):
             sign_up_frame.rowconfigure(i, weight=1)
@@ -496,6 +496,12 @@ class Forum(tk.CTkFrame):
         self.controller = controller
 
         self.post_frame = tk.CTkScrollableFrame(self)
+        self.post = []
+
+        self.new_post_frame = tk.CTkFrame(self, fg_color="transparent")
+
+        self.user_entry = tk.CTkEntry(self.new_post_frame, font=FONT,
+                                      width=200, placeholder_text="Insert new post title....")
         self.init_components()
 
     def init_components(self) -> None:
@@ -504,9 +510,49 @@ class Forum(tk.CTkFrame):
             self.rowconfigure(i, weight=1)
             self.columnconfigure(i, weight=1)
 
-        new_post = tk.CTkButton(self, text="New post", corner_radius=360, height=40)
-        new_post.grid(row=0, column=1, sticky="es", pady=5)
+        self.new_post_frame.grid(row=0, column=0, sticky="es", pady=5, columnspan=2)
+
+        self.user_entry.pack(side="left")
+
+        new_post = tk.CTkButton(self.new_post_frame, text="New post", corner_radius=360, height=30)
+        new_post.pack(side="left", padx=10)
+
         self.post_frame.grid(row=1, column=1, sticky="news")
+        new_post.bind("<Button-1>", lambda event=None: self.controller.create_new_post(self.user_entry.get(), event))
+
+
+class NewPostCreation(tk.CTkToplevel):
+    def __init__(self, master, controller, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.app = master
+        self.controller = controller
+        self.title("Sign Up")
+        self.geometry("600x400")
+        self.attributes("-topmost", True)
+        self.resizable(False, False)
+
+        self.post_title = tk.StringVar()
+
+        self.init_components()
+
+    def init_components(self) -> None:
+        """Create components and layout the UI."""
+        post_frame = tk.CTkFrame(self)
+        post_frame.pack()
+
+        # Username Label and Entry
+        post_label = tk.CTkLabel(post_frame, text="Post Title: ", font=FONT)
+        post_label.pack(side="left")
+
+        user_entry = tk.CTkEntry(post_frame, font=FONT,
+                                 width=200, textvariable=self.post_title)
+        user_entry.pack(side="left")
+
+        signup_button = tk.CTkButton(post_label, text="Sign Up", height=30)
+        signup_button.pack()
+
+        # Bind Button
+        signup_button.bind("<Button-1>", lambda event=None: self.controller.create_new_post(user_entry.get()))
 
 
 class Credit(tk.CTkFrame):

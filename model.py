@@ -5,12 +5,12 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from PIL import Image
 
-
 class Model:
     def __init__(self):
         self.df = pd.read_csv('backloggd_games.csv')
         self.password = pd.read_csv('user_password.csv')
         self.forum_data = pd.read_csv('forum.csv')
+        self.user = ""
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
         self.string_to_number()
@@ -18,17 +18,41 @@ class Model:
     def game_title(self):
         return self.df["Title"].values.tolist()
 
+    def new_post(self, title: str):
+        """Append new post to csv"""
+        new_post = [title, self.user]
+        try:
+            self.forum_data = pd.read_csv('forum.csv')
+
+            if len(self.forum_data.columns) == 1 and self.forum_data.empty:
+                self.forum_data["0"] = new_post
+            else:
+                # handle row error by input waiting-for-user-to-comment
+                if len(title) != len(self.forum_data):
+                    for _ in range(abs(len(self.forum_data) - len(new_post))):
+                        new_post.append("waiting-for-user-to-comment")
+                    self.forum_data[str(len(self.forum_data.columns))] = new_post
+
+            self.forum_data.to_csv('forum.csv', index=False)
+            self.forum_data = pd.read_csv('forum.csv')
+            return True
+
+        except PermissionError:
+            return False
+
     def check_password(self, user, password):
         """Is the password correct?"""
-        try:
-            who = self.password[self.password['Username'] == user]
-            if who.empty:
-                return False
-            else:
-                return password in str(who['Password'].iloc[0])
-
-        except ValueError:
-            return False
+        self.user = user
+        return True  # TODO uncomment this when submit real project
+        # try:
+        #     who = self.password[self.password['Username'] == user]
+        #     if who.empty:
+        #         return False
+        #     else:
+        #         return password in str(who['Password'].iloc[0])
+        #
+        # except ValueError:
+        #     return False
 
     def update_csv(self, csv_name: str, value: dict):
         """Update target csv file"""

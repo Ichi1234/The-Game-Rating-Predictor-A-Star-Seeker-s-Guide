@@ -172,6 +172,16 @@ class ForumController:
         self.view = view
         self.model = model
 
+    def create_new_post(self, post_title: str, event):
+        """Use for create new forum post"""
+        if not post_title:
+            CTkMessagebox(title="Error", message="Please input something for your post title.", icon="cancel")
+        else:
+            self.view.current_menu.user_entry.delete(0, tk.END)
+            update = self.model.new_post(post_title)
+            if not update:
+                CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+
 
 class CreditController:
     def __init__(self, view, model):
