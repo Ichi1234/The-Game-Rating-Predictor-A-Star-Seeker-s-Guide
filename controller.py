@@ -1,3 +1,4 @@
+from CTkMessagebox import CTkMessagebox
 import customtkinter as tk
 
 
@@ -62,6 +63,18 @@ class LoginController(Controller):
     def signup(self, master, event):
         """This method use for signup button in Login class"""
         self.view.menu['up'](master, self)
+
+    def add_new_people(self, user, password):
+        """add new user to csv file"""
+        if not user or not password:
+            CTkMessagebox(title="Error", message="Invalid Username or Password.", icon="cancel")
+        else:
+            update = self.model.update_csv("pass", {'Username': user, 'Password': password})
+            if not update:
+                CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+
+
+
 
 
 class GameController:

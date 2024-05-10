@@ -9,6 +9,8 @@ from PIL import Image
 class Model:
     def __init__(self):
         self.df = pd.read_csv('backloggd_games.csv')
+        self.password = pd.read_csv('user_password.csv')
+        self.forum_data = pd.read_csv('forum.csv')
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
         self.string_to_number()
@@ -16,6 +18,14 @@ class Model:
     def game_title(self):
         return self.df["Title"].values.tolist()
 
+    def update_csv(self, csv_name: str, value: dict):
+        if csv_name == "pass":
+            try:
+                self.password._append(value, ignore_index=True).to_csv('user_password.csv', index=False)
+                self.password = pd.read_csv('user_password.csv')
+                return True
+            except PermissionError:
+                return False
     @staticmethod
     def k_destroyer(val):
         """Remove K in csv and *1000 to the value which have K"""

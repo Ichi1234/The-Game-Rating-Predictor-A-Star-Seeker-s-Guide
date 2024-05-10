@@ -199,6 +199,9 @@ class SignUp(tk.CTkToplevel):
         self.attributes("-topmost", True)
         self.resizable(False, False)
 
+        self.user_name = tk.StringVar()
+        self.password = tk.StringVar()
+
         self.init_components()
 
     def init_components(self) -> None:
@@ -210,22 +213,22 @@ class SignUp(tk.CTkToplevel):
         user_label = tk.CTkLabel(sign_up_frame, text="Username", font=FONT)
         user_label.grid(row=0, column=0, sticky="sw", padx=15)
         user_entry = tk.CTkEntry(sign_up_frame, placeholder_text="Type your username....", font=FONT,
-                                 width=200)
+                                 width=200, textvariable=self.user_name)
         user_entry.grid(row=1, column=0, sticky="new", padx=15, columnspan=10)
 
         # Password Label and Entry
         pass_label = tk.CTkLabel(sign_up_frame, text="Password", font=FONT)
         pass_label.grid(row=1, column=0, sticky="sw", padx=15)
         pass_entry = tk.CTkEntry(sign_up_frame, placeholder_text="Type your password....", font=FONT,
-                                 width=200)
+                                 width=200, textvariable=self.password)
         pass_entry.grid(row=2, column=0, sticky="new", padx=15, columnspan=10)
 
-        # Signup and Sign in Button
         signup_button = tk.CTkButton(sign_up_frame, text="Sign Up", height=30)
         signup_button.grid(row=2, column=2, sticky="s")
 
         # Bind Button
-        signup_button.bind("<Button-1>", lambda event=None: self.controller.signup(self.app, event))
+        signup_button.bind("<Button-1>", lambda event=None: self.controller.add_new_people(user_entry.get(),
+                           pass_entry.get()))
 
         for i in range(4):
             sign_up_frame.rowconfigure(i, weight=1)
