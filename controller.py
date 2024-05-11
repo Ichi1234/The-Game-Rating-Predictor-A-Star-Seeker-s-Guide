@@ -78,6 +78,9 @@ class LoginController(Controller):
             update = self.model.update_csv("pass", {'Username': user, 'Password': password})
             if not update:
                 CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+            elif update == "exist":
+                CTkMessagebox(title="Error", message="This Username already taken.", icon="cancel")
+
             else:
                 CTkMessagebox(title="Success",
                               message="Congratulations, your account has been successfully created."

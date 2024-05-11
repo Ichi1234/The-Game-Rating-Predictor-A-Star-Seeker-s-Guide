@@ -46,24 +46,27 @@ class Model:
     def check_password(self, user, password):
         """Is the password correct?"""
         self.user = user
-        return True  # TODO uncomment this when submit real project
-        # try:
-        #     who = self.password[self.password['Username'] == user]
-        #     if who.empty:
-        #         return False
-        #     else:
-        #         return password in str(who['Password'].iloc[0])
-        #
-        # except ValueError:
-        #     return False
+        try:
+            who = self.password[self.password['Username'] == user]
+            if who.empty:
+                return False
+            else:
+                return password in str(who['Password'].iloc[0])
+
+        except ValueError:
+            return False
 
     def update_csv(self, csv_name: str, value: dict, value2=None):
         """Update target csv file"""
         if csv_name == "pass":
             try:
-                self.password._append(value, ignore_index=True).to_csv('user_password.csv', index=False)
-                self.password = pd.read_csv('user_password.csv')
-                return True
+                if self.password[self.password["Username"] == value["Username"]].empty:
+                    self.password._append(value, ignore_index=True).to_csv('user_password.csv', index=False)
+                    self.password = pd.read_csv('user_password.csv')
+                    return True
+                else:
+                    return "exist"
+
             except PermissionError:
                 return False
         elif csv_name == "forum":

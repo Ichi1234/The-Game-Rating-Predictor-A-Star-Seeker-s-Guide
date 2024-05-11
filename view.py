@@ -418,21 +418,21 @@ class StoryTelling(tk.CTkFrame):
 
     def init_components(self) -> None:
         """Create components and layout the UI."""
-        select_graph = tk.CTkComboBox(self, values=["Rating and Plays", "Rating and Genres", "Avg Rating Per Decade",
-                                                    "Top 20 Platforms Based on Rating and Popularity"])
-        select_graph.pack(pady=10, expand=True)
+        top_frame = tk.CTkFrame(self)
+        top_frame.pack(pady=10, expand=True)
 
+        select_graph = tk.CTkComboBox(top_frame,
+                                      values=["Rating and Plays", "Rating and Genres", "Avg Rating Per Decade",
+                                              "Top 20 Platforms Based on Rating and Popularity"])
+        select_graph.pack(side="left", expand=True)
         self.graph.pack(pady=10, expand=True)
 
-        button_frame = tk.CTkFrame(self)
-        button_frame.pack(pady=5, expand=True)
-
-        create_button = tk.CTkButton(button_frame, text="Create Graph")
-        create_button.pack(pady=5, expand=True)
+        create_button = tk.CTkButton(top_frame, text="Create Graph")
+        create_button.pack(side="left", padx=5, expand=True)
         create_button.bind("<Button-1>", lambda event=None: self.controller.story_graph(select_graph.get()))
 
-        back_button = tk.CTkButton(button_frame, text="Back")
-        back_button.pack(expand=True)
+        back_button = tk.CTkButton(self, text="Back")
+        back_button.pack(pady=5, expand=True)
         back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
 
 
