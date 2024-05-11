@@ -234,6 +234,8 @@ class ForumController:
     def new_comment(self, comment: str, data: dict):
         """Add new comment to database and display it"""
         self.view.current_menu.new_comment_text.delete(0, tk.END)
+        if not comment:
+            return
 
         update = False
         list_of_data = []
@@ -286,17 +288,13 @@ class ForumController:
                     in self.view.current_menu.track_comment):
                 continue
 
+
             who_comment = tk.CTkLabel(comment_frame,
                                       text=f"{user_name[put_comment]} :",
                                       font=("Arial", 18))
             who_comment.pack(side="left", padx=10)
 
-            if len(user_comment[put_comment]) > 170:
-                spaced_com = self.fix_toolong_text(user_comment[put_comment], 170)
-            else:
-                spaced_com = user_comment[put_comment]
-
-            add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=("Arial", 16))
+            add_comment = tk.CTkLabel(comment_frame, text=user_comment[put_comment], font=("Arial", 16))
             add_comment.pack(side="left", padx=10)
 
             comment_frame.pack(side="top", expand=True, anchor="w", pady=5)

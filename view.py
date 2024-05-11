@@ -664,12 +664,7 @@ class SelectedForum(tk.CTkFrame):
                                       text=f"{user_name[comment]} :", font=("Arial", 18))
             who_comment.pack(side="left", padx=10)
 
-            if len(user_comment[comment]) > 170:
-                spaced_com = self.controller.fix_toolong_text(user_comment[comment], 170)
-            else:
-                spaced_com = user_comment[comment]
-
-            add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=FONT)
+            add_comment = tk.CTkLabel(comment_frame, text=user_comment[comment], font=FONT)
             add_comment.pack(side="left", padx=10)
 
             self.track_comment.append((user_name[comment], user_comment[comment]))
