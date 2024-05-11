@@ -25,6 +25,12 @@ My database comes from [Popular Video Games 🎮🕹️](https://www.kaggle.com/
 ### UML Class Diagram
 ![UML Class Diagram](./UML.png)
 
+### UML Sequence Diagram
+
+#### Program from start to Storytelling
+
+![UML Sequence Diagram](./Sequence_Diagram.png)
+
 # How to run the program
 
 1. Download all the requirement libraries. (requirement.txt)
