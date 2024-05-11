@@ -304,6 +304,10 @@ class ForumController:
                                                          user_comment[put_comment]))
             break
 
+    def is_it_guest(self):
+        """Check if the user use Guest ID"""
+        return self.model.user == "Guest"
+
     @staticmethod
     def fix_toolong_text(data: str, space: int):
         """If the data is too long frame will extend and my layout will broke
@@ -318,3 +322,7 @@ class CreditController:
     def __init__(self, view, model):
         self.view = view
         self.model = model
+
+    def display_text(self):
+        """display credit text for Credit class"""
+        return self.model.credit

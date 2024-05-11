@@ -13,13 +13,25 @@ class Model:
         self.df = pd.read_csv('backloggd_games.csv')
         self.password = pd.read_csv('user_password.csv')
         self.forum_data = pd.read_csv('forum.csv')
+
+        self.credit = ("Hello! My name is Kasidet Uthaiwiwatkul. \n"
+                       "I am the developer of this program. \nIf you have any "
+                       "questions or would like to hire me, \n"
+                       "please feel free to contact me using any of the following"
+                       " methods. \n \nMy contact information:"
+                       "\nFacebook: Kasidet Uthaiwiwatkul\nEmail: "
+                       "ichigamer111th@gmail.com"
+                       "\nInstragram : iiiiiiiiiiiiiichiiiiiiiiiiiiii"
+                       "\nYoutube: "
+                       "@Chosen_Banana\nDiscord: what_is_my_username")
+
         self.user = ""
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
         self.string_to_number()
 
     def game_title(self):
-        """send all of the game title to GameData class"""
+        """send all the game title to GameData class"""
         return self.df["Title"].values.tolist()
 
     def new_post(self, title: str):

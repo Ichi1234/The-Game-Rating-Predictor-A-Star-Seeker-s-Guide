@@ -136,7 +136,7 @@ class Login(tk.CTkFrame):
         self.controller = controller
 
         self.__left_frame = tk.CTkFrame(master=self, fg_color="#031b70")
-        self.__announce = tk.CTkScrollableFrame(master=self.__left_frame)
+        self.announce = tk.CTkScrollableFrame(master=self.__left_frame, orientation="horizontal")
         self.__data_frame = tk.CTkFrame(master=self, fg_color="#808080")
 
         self.init_components()
@@ -182,7 +182,7 @@ class Login(tk.CTkFrame):
         self.__left_frame.rowconfigure(0, weight=1)
 
         # Announcement grid
-        self.__announce.grid(row=0, column=0, sticky="news", padx=50, pady=50, rowspan=4)
+        self.announce.grid(row=0, column=0, sticky="news", padx=50, pady=50, rowspan=4)
 
         # Data Frame grid and configure
         self.__data_frame.grid(row=0, column=1, sticky="news", columnspan=2, rowspan=4)
@@ -196,8 +196,19 @@ class Login(tk.CTkFrame):
 
     def announcement_text(self) -> None:
         """This method use for insert text to announce"""
-        title = tk.CTkLabel(self.__announce, text="Announcement", font=("Arial", 20))
-        title.grid(row=0, column=0)
+        frame = tk.CTkFrame(self.announce)
+        title = tk.CTkLabel(frame, text="Announcement", font=("Arial", 20))
+        frame.columnconfigure(0, weight=1)
+        title.grid(row=0, column=0, sticky="w")
+        frame.pack()
+
+        tk.CTkLabel(self.announce,
+                    text="If you are a new user you should Sign up first.\n"
+                         " But, if you don't want to Sign Up you can "
+                         "use \n\nUsername: Guest \nPassword: Guest \n\n"
+                         "to sign in.\n However, if you use a Guest ID "
+                         "you can't"
+                         "comment or create a new forum.").pack()
 
 
 class SignUp(tk.CTkToplevel):
@@ -551,9 +562,14 @@ class Forum(tk.CTkFrame):
         new_post.pack(side="left", padx=10)
 
         self.post_frame.grid(row=1, column=1, sticky="news")
-        new_post.bind("<Button-1>",
-                      lambda event=None: self.controller.create_new_post(self.user_entry.get(),
-                                                                         self, event))
+
+        if self.controller.is_it_guest():
+            new_post.configure(state="disabled")
+            self.user_entry.configure(state="disabled")
+        else:
+            new_post.bind("<Button-1>",
+                          lambda event=None: self.controller.create_new_post(self.user_entry.get(),
+                                                                             self, event))
 
 
 class SelectedForum(tk.CTkFrame):
@@ -593,7 +609,7 @@ class SelectedForum(tk.CTkFrame):
             new_title = self.data["Title"]
 
         title = tk.CTkLabel(title_frame, text=new_title, font=("Arial", 30))
-        title.grid(column=0, columnspan=10, sticky="new", pady=10)
+        title.grid(column=0, columnspan=10, sticky="new", pady=20)
 
         writer = tk.CTkLabel(title_frame, text=f"-{self.data['Name']}-", font=("Arial", 20))
         writer.grid(column=0, columnspan=10, sticky="se", padx=10)
@@ -632,6 +648,8 @@ class SelectedForum(tk.CTkFrame):
             self.track_comment.append((user_name[comment], user_comment[comment]))
             comment_frame.pack(side="top", expand=True, anchor="w")
 
+        if self.controller.is_it_guest():
+            self.new_comment_text.configure(state="disabled")
         self.new_comment_text.grid(row=2, sticky="news", column=0, pady=5)
 
         # Bind Button
@@ -648,8 +666,5 @@ class Credit(tk.CTkFrame):
         self.configure(fg_color=FRAME_COLOR)
         self.title = "About us"
         self.controller = controller
-        self.init_components()
-
-    def init_components(self) -> None:
-        """Create components and layout the UI."""
-        pass
+        self.text = tk.CTkLabel(self, text=self.controller.display_text(), font=("Arial", 20))
+        self.text.pack(side="top", expand=True, fill="both")
