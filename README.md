@@ -31,9 +31,15 @@ My database comes from [Popular Video Games 🎮🕹️](https://www.kaggle.com/
 
 ![UML Sequence Diagram](./Sequence_Diagram.png)
 
-# How to run the program
+## Installation Guide
+1. Clone the project
+> git clone https://github.com/Ichi1234/The_Game_Rating_Predictor.git
 
-1. Download all the requirement libraries. (requirement.txt)
-2. Click run at main.py.
-3. Click Sign up or Sign in.
-4. You can navigate through my program by using the Menu at the top left of the screen.
+2. Navigate to the project directory
+> cd The_Game_Rating_Predictor
+
+3. Install the requirements.txt
+> pip install -r requirements.txt
+
+4. Run the project
+> python main.py
