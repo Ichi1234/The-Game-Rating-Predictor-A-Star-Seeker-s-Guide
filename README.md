@@ -22,10 +22,10 @@ Requires Python 3.11 and Python Packages that are listed in [requirements.txt](.
 # Database
 My database comes from [Popular Video Games 🎮🕹️](https://www.kaggle.com/datasets/matheusfonsecachaves/popular-video-games?resource=download)
 
-### UML Class Diagram
+# UML Class Diagram
 ![UML Class Diagram](./UML.png)
 
-### UML Sequence Diagram
+# UML Sequence Diagram
 
 #### Program from start to Storytelling
 
