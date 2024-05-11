@@ -1,6 +1,5 @@
 """This module is MVC view class it is use for show GUI to user"""
 from PIL import Image
-from cryptography.fernet import Fernet
 import customtkinter as tk
 
 FONT = ("Arial", 16)
