@@ -20,9 +20,10 @@ The reason why I made this project is I want to make a program that is a platfor
 Requires Python 3.11 and Python Packages that are listed in [requirements.txt](./requirements.txt).
 
 # Database
-My database come from [Popular Video Games 🎮🕹️](https://www.kaggle.com/datasets/matheusfonsecachaves/popular-video-games?resource=download)
+My database comes from [Popular Video Games 🎮🕹️](https://www.kaggle.com/datasets/matheusfonsecachaves/popular-video-games?resource=download)
 
-
+### UML Class Diagram
+![UML Class Diagram](./UML.png)
 
 # How to run the program
 
