@@ -24,7 +24,7 @@ class Controller:
         self.view.switch_menu("login", LoginController(self.view, self.model))
         self.view.main_loop()
 
-    def menu_button(self, menu_name, event):
+    def menu_button(self, menu_name):
         """method for bind menu button"""
         self.view.menu_window.destroy()
         self.view.app.columnconfigure(1, weight=0)
@@ -55,7 +55,7 @@ class LoginController(Controller):
         self.view = view
         self.model = model
 
-    def signin(self, user, password, event):
+    def signin(self, user, password):
         """This method use for login button in Login class"""
         if not user or not password:
             CTkMessagebox(title="Error", message="Invalid Username or Password.", icon="cancel")
@@ -68,7 +68,7 @@ class LoginController(Controller):
                 CTkMessagebox(title="Error",
                               message="Your Username or Password is wrong.", icon="cancel")
 
-    def signup(self, master, event):
+    def signup(self, master):
         """This method use for signup button in Login class"""
         self.view.menu['up'](master, self)
 
@@ -185,7 +185,7 @@ class ForumController:
         self.view = view
         self.model = model
 
-    def create_new_post(self, post_title: str, master, event):
+    def create_new_post(self, post_title: str, master):
         """Use for create new forum post"""
         if not post_title:
             CTkMessagebox(title="Error",
@@ -231,7 +231,7 @@ class ForumController:
         self.view.forum_data = data
         self.view.switch_menu("UserForum", ForumController(self.view, self.model))
 
-    def new_comment(self, comment: str, data: dict, event):
+    def new_comment(self, comment: str, data: dict):
         """Add new comment to database and display it"""
         self.view.current_menu.new_comment_text.delete(0, tk.END)
 

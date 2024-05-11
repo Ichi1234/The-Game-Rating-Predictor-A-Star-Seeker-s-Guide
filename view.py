@@ -114,10 +114,10 @@ class View:
 
         self.menu_window.grid(row=1, column=0, rowspan=10, sticky="new")
         # Bind Button
-        game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game", event))
-        stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat", event))
-        forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", event))
-        credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit", event))
+        game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game"))
+        stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat"))
+        forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum",))
+        credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit"))
 
     def main_loop(self):
         """Loop of the program"""
@@ -172,10 +172,10 @@ class Login(tk.CTkFrame):
 
         # Bind Button
         signup_button.bind("<Button-1>",
-                           lambda event=None: self.controller.signup(self.app, event))
+                           lambda event=None: self.controller.signup(self.app))
         login_button.bind("<Button-1>",
                           lambda event=None: self.controller.signin(user_entry.get(),
-                                                                    pass_entry.get(), event))
+                                                                    pass_entry.get()))
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
@@ -569,7 +569,7 @@ class Forum(tk.CTkFrame):
         else:
             new_post.bind("<Button-1>",
                           lambda event=None: self.controller.create_new_post(self.user_entry.get(),
-                                                                             self, event))
+                                                                             self))
 
 
 class SelectedForum(tk.CTkFrame):
@@ -655,7 +655,7 @@ class SelectedForum(tk.CTkFrame):
         # Bind Button
         self.new_comment_text.bind("<Return>",
                                    lambda event=None: self.controller.new_comment(
-                                       self.new_comment_text.get(), self.data, event))
+                                       self.new_comment_text.get(), self.data))
 
 
 class Credit(tk.CTkFrame):
