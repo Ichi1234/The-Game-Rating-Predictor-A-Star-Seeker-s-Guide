@@ -19,6 +19,10 @@ class Controller:
         else:
             tk.set_appearance_mode("light")
 
+    def please_encrypt(self):
+        """encrypt data"""
+        self.model.encrypt_data()
+
     def start_program(self):
         """Start the Program"""
         self.view.switch_menu("login", LoginController(self.view, self.model))
@@ -53,6 +57,7 @@ class LoginController(Controller):
         """Initialize for LoginController"""
         super().__init__()
         self.view = view
+        self.view.app.controller = self
         self.model = model
 
     def signin(self, user, password):
@@ -284,22 +289,22 @@ class ForumController:
 
             if put_comment == "waiting-for-user-to-comment":
                 break
-            if ((user_name[put_comment], user_comment[put_comment])
-                    in self.view.current_menu.track_comment):
+            elif ((user_name[put_comment], user_comment[put_comment], put_comment)
+                  in self.view.current_menu.track_comment):
                 continue
+            else:
 
+                who_comment = tk.CTkLabel(comment_frame,
+                                          text=f"{user_name[put_comment]} :",
+                                          font=("Arial", 18))
+                who_comment.pack(side="left", padx=10)
 
-            who_comment = tk.CTkLabel(comment_frame,
-                                      text=f"{user_name[put_comment]} :",
-                                      font=("Arial", 18))
-            who_comment.pack(side="left", padx=10)
-
-            add_comment = tk.CTkLabel(comment_frame, text=user_comment[put_comment], font=("Arial", 16))
-            add_comment.pack(side="left", padx=10)
-
+                add_comment = tk.CTkLabel(comment_frame, text=user_comment[put_comment], font=("Arial", 16))
+                add_comment.pack(side="left", padx=10)
             comment_frame.pack(side="top", expand=True, anchor="w", pady=5)
             self.view.current_menu.track_comment.append((user_name[put_comment],
-                                                         user_comment[put_comment]))
+                                                         user_comment[put_comment], put_comment))
+
             break
 
     def is_it_guest(self):

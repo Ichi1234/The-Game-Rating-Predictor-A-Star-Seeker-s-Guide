@@ -12,40 +12,17 @@ class App(tk.CTk):
 
     def __init__(self):
         super().__init__()
-        with open('everyone_key.key', 'rb') as mykey:
-            self.key = mykey.read()
-        self.fernet = Fernet(self.key)
-        # self.decrypt_data()
-
         self.title("The Game Rating Predictor: A Star Seeker's Guide")
         self.geometry("800x500")
+        self.controller = None
         tk.set_appearance_mode("dark")
 
     def closing_the_program(self):
         """When user click at X symbol on the top left destroy everything
         or click at exit button
         """
-        # self.encrypt_data()
+        self.controller.please_encrypt()
         self.tk.quit()
-
-    # def decrypt_data(self):
-    #     """Decrypt password csv that is currently encrypted"""
-    #     with open('user_password.csv', 'rb') as encrypted_file:
-    #         encrypted = encrypted_file.read()
-    #
-    #     decrypted = self.fernet.decrypt(encrypted)
-    #
-    #     with open('user_password.csv', 'wb') as decrypted_file:
-    #         decrypted_file.write(decrypted)
-    #
-    # def encrypt_data(self):
-    #     """Encrypt password csv before leaving"""
-    #     with open('user_password.csv', 'rb') as decrypt_data:
-    #         decrypt = decrypt_data.read()
-    #
-    #     encrypted = self.fernet.encrypt(decrypt)
-    #     with open('user_password.csv', 'wb') as encrypted_file:
-    #         encrypted_file.write(encrypted)
 
 
 class View:
@@ -55,7 +32,7 @@ class View:
         """Initialize of View class"""
         self.app = App()
 
-        self.app.protocol("WM_DELETE_WINDOW", self.app.closing_the_program())
+        self.app.protocol("WM_DELETE_WINDOW", self.app.closing_the_program)
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "up": SignUp, "UserForum": SelectedForum,
@@ -114,8 +91,8 @@ class View:
         self.dark_mode.select()
         self.dark_mode.pack(side="left", expand=True)
 
-        exit_button = tk.CTkButton(menu_label, text="Exit", font=FONT,
-                                   command=self.app.closing_the_program, fg_color="transparent")
+        exit_button = tk.CTkButton(menu_label, text="Exit", font=FONT, fg_color="transparent")
+        exit_button.configure(command=self.app.closing_the_program)
         exit_button.pack(side="left", expand=True)
 
     def menu_window_creation(self):
@@ -659,16 +636,15 @@ class SelectedForum(tk.CTkFrame):
 
             if user_comment[comment] == "waiting-for-user-to-comment":
                 break
+            else:
+                who_comment = tk.CTkLabel(comment_frame,
+                                          text=f"{user_name[comment]} :", font=("Arial", 18))
+                who_comment.pack(side="left", padx=10)
 
-            who_comment = tk.CTkLabel(comment_frame,
-                                      text=f"{user_name[comment]} :", font=("Arial", 18))
-            who_comment.pack(side="left", padx=10)
-
-            add_comment = tk.CTkLabel(comment_frame, text=user_comment[comment], font=FONT)
-            add_comment.pack(side="left", padx=10)
-
-            self.track_comment.append((user_name[comment], user_comment[comment]))
+                add_comment = tk.CTkLabel(comment_frame, text=user_comment[comment], font=FONT)
+                add_comment.pack(side="left", padx=10)
             comment_frame.pack(side="top", expand=True, anchor="w")
+            self.track_comment.append((user_name[comment], user_comment[comment], comment))
 
         if self.controller.is_it_guest():
             self.new_comment_text.configure(state="disabled")

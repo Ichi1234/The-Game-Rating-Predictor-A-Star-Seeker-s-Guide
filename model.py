@@ -2,6 +2,7 @@
 import pandas as pd
 import seaborn as sns
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from cryptography.fernet import Fernet
 from matplotlib.figure import Figure
 from PIL import Image
 
@@ -10,6 +11,12 @@ class Model:
     """This class use for store database and calculation"""
 
     def __init__(self):
+        with open('everyone_key.key', 'rb') as mykey:
+            self.key = mykey.read()
+        self.fernet = Fernet(self.key)
+        self.decrypt_data()
+
+
         self.df = pd.read_csv('backloggd_games.csv')
         self.password = pd.read_csv('user_password.csv')
         self.forum_data = pd.read_csv('forum.csv')
@@ -29,6 +36,25 @@ class Model:
         # drop none and unused column
         self.df.dropna(subset=self.df.columns.tolist(), how='any', inplace=True)
         self.string_to_number()
+
+    def decrypt_data(self):
+        """Decrypt password csv that is currently encrypted"""
+        with open('user_password.csv', 'rb') as encrypted_file:
+            encrypted = encrypted_file.read()
+
+        decrypted = self.fernet.decrypt(encrypted)
+
+        with open('user_password.csv', 'wb') as decrypted_file:
+            decrypted_file.write(decrypted)
+
+    def encrypt_data(self):
+        """Encrypt password csv before leaving"""
+        with open('user_password.csv', 'rb') as decrypt_data:
+            decrypt = decrypt_data.read()
+
+        encrypted = self.fernet.encrypt(decrypt)
+        with open('user_password.csv', 'wb') as encrypted_file:
+            encrypted_file.write(encrypted)
 
     def game_title(self):
         """send all the game title to GameData class"""
