@@ -236,7 +236,48 @@ class ForumController:
                 data.update({"com_0": comment, "user_0": self.model.user})
                 list_of_data = ["com_0", "user_0", [comment, self.model.user]]
 
-        self.model.update_csv("forum", data, list_of_data)
+        success = self.model.update_csv("forum", data, list_of_data)
+        if not success:
+            CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+        else:
+            current_comment = list(data.values())[2:]
+            user_name = []
+            user_comment = []
+            for i in range(len(current_comment)):
+                if i % 2 == 0:
+                    user_comment.append(current_comment[i])
+                else:
+                    user_name.append(current_comment[i])
+
+            for comment in range(len(user_comment)):
+                comment_frame = tk.CTkFrame(self.view.current_menu.frame_for_comment)
+
+                if comment == "waiting-for-user-to-comment":
+                    break
+                elif (user_name[comment], user_comment[comment]) in self.view.current_menu.track_comment:
+                    continue
+                else:
+                    who_comment = tk.CTkLabel(comment_frame, text=f"{user_name[comment]} :", font=("Arial", 18))
+                    who_comment.pack(side="left", padx=10)
+
+                    if len(user_comment[comment]) > 170:
+                        spaced_com = self.fix_toolong_text(user_comment[comment], 170)
+                    else:
+                        spaced_com = user_comment[comment]
+
+                    add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=("Arial", 16))
+                    add_comment.pack(side="left", padx=10)
+
+                comment_frame.pack(side="top", expand=True, anchor="w", pady=5)
+                self.view.current_menu.track_comment.append((user_name[comment], user_comment[comment]))
+                break
+
+    @staticmethod
+    def fix_toolong_text(data: str, space: int):
+        """If the data is too long frame will extend and my layout will broke
+        This method is use to create a new line if the data is too long"""
+        space_data = [data[i:i + space] for i in range(0, len(data), space)]
+        return '\n'.join(space_data)
 
 
 class CreditController:

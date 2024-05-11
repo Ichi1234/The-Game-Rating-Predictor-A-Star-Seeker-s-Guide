@@ -537,9 +537,12 @@ class SelectedForum(tk.CTkFrame):
         self.controller = controller
 
         self.data = data
+
         self.list_data = list(self.data.values())[2:]
+        self.track_comment = []
 
         self.new_comment_text = tk.CTkEntry(self, placeholder_text="Send a message (PRESS ENTER)")
+        self.frame_for_comment = tk.CTkScrollableFrame(self)
 
         self.init_components()
 
@@ -555,14 +558,18 @@ class SelectedForum(tk.CTkFrame):
         title_frame.grid(row=0, sticky="news", column=0, pady=2)
         title_frame.columnconfigure(0, weight=1)
 
-        title = tk.CTkLabel(title_frame, text=self.data["Title"], font=("Arial", 30))
+        if len(self.data["Title"]) > 90:
+            new_title = self.controller.fix_toolong_text(self.data["Title"], 90)
+        else:
+            new_title = self.data["Title"]
+
+        title = tk.CTkLabel(title_frame, text=new_title, font=("Arial", 30))
         title.grid(column=0, columnspan=10, sticky="new", pady=10)
 
         writer = tk.CTkLabel(title_frame, text=f"-{self.data['Name']}-", font=("Arial", 20))
-        writer.grid(column=0, columnspan=10, sticky="se")
+        writer.grid(column=0, columnspan=10, sticky="se", padx=10)
 
-        frame_for_comment = tk.CTkScrollableFrame(self)
-        frame_for_comment.grid(row=1, column=0, sticky="news")
+        self.frame_for_comment.grid(row=1, column=0, sticky="news")
 
         user_name = []
         user_comment = []
@@ -573,25 +580,34 @@ class SelectedForum(tk.CTkFrame):
                 user_name.append(self.list_data[i])
 
         for comment in range(len(user_name)):
-            comment_frame = tk.CTkFrame(frame_for_comment)
-            comment_frame.pack(fill="both", expand=True)
+            comment_frame = tk.CTkFrame(self.frame_for_comment)
+            comment_frame.columnconfigure(0, weight=1)
+
             title_frame.columnconfigure(0, weight=1)
 
             if user_comment[comment] == "waiting-for-user-to-comment":
                 break
             else:
-                who_comment = tk.CTkLabel(comment_frame, text=user_name[comment], font=FONT)
-                who_comment.grid(column=0, columnspan=10, sticky="new")
+                who_comment = tk.CTkLabel(comment_frame, text=f"{user_name[comment]} :", font=("Arial", 18))
+                who_comment.pack(side="left", padx=10)
 
-                add_comment = tk.CTkLabel(comment_frame, text=user_comment[comment], font=FONT)
-                add_comment.grid(column=0, columnspan=10, sticky="se", padx=20)
+                if len(user_comment[comment]) > 170:
+                    spaced_com = self.controller.fix_toolong_text(user_comment[comment], 170)
+                else:
+                    spaced_com = user_comment[comment]
+
+                add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=FONT)
+                add_comment.pack(side="left", padx=10)
+
+                self.track_comment.append((user_name[comment], user_comment[comment]))
+                comment_frame.pack(side="top", expand=True, anchor="w")
 
         self.new_comment_text.grid(row=2, sticky="news", column=0, pady=5)
 
         # Bind Button
         self.new_comment_text.bind("<Return>",
-                                   lambda event=None: self.controller.new_comment(self.new_comment_text.get(),
-                                                                                  self.data, event))
+                                   lambda event=None: self.controller.new_comment(
+                                       self.new_comment_text.get(), self.data, event))
 
 
 class Credit(tk.CTkFrame):
