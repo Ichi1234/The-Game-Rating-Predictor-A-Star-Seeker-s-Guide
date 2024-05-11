@@ -1,9 +1,10 @@
+"""MVC Controller"""
 from CTkMessagebox import CTkMessagebox
 import customtkinter as tk
 
 
 class Controller:
-    """MVC Controller"""
+    """this class is use for connect between view and model"""
 
     def __init__(self, model=None, view=None):
         self.model = model
@@ -64,7 +65,8 @@ class LoginController(Controller):
                 self.view.switch_menu("game", GameController(self.view, self.model))
                 self.view.menu_button.configure(command=self.menu_title_button)
             else:
-                CTkMessagebox(title="Error", message="Your Username or Password is wrong.", icon="cancel")
+                CTkMessagebox(title="Error",
+                              message="Your Username or Password is wrong.", icon="cancel")
 
     def signup(self, master, event):
         """This method use for signup button in Login class"""
@@ -75,11 +77,14 @@ class LoginController(Controller):
         if not user or not password:
             CTkMessagebox(title="Error", message="Invalid Username or Password.", icon="cancel")
         else:
-            update = self.model.update_csv("pass", {'Username': user, 'Password': password})
+            update = self.model.update_csv("pass",
+                                           {'Username': user, 'Password': password})
             if not update:
-                CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+                CTkMessagebox(title="Error",
+                              message="Please close csv file that you are opening.", icon="cancel")
             elif update == "exist":
-                CTkMessagebox(title="Error", message="This Username already taken.", icon="cancel")
+                CTkMessagebox(title="Error",
+                              message="This Username already taken.", icon="cancel")
 
             else:
                 CTkMessagebox(title="Success",
@@ -103,7 +108,8 @@ class GameController:
         data = self.model.find_game_data(game_name)
 
         # add new line if summary is too long
-        data['Summary'] = "\n".join([data['Summary'][i:i + 45] for i in range(0, len(data['Summary']), 45)])
+        data['Summary'] = "\n".join([data['Summary']
+                                     [i:i + 45] for i in range(0, len(data['Summary']), 45)])
 
         # if data is list turn it to str
         data['Genres'] = self.fix_toolong_text(",".join(eval(data['Genres'])))
@@ -123,18 +129,20 @@ class GameController:
     @staticmethod
     def fix_toolong_text(data: str):
         """If the data is too long frame will extend and my layout will broke
-        This method is use to create a new line if the data is too long"""
+        This method is used to create a new line if the data is too long"""
         split_data = data.split(",")
         new_str = []
-        for i in range(len(split_data)):
-            if i % 3 == 0 and i != 0 and len(data) > 38:
-                new_str.append(f"\n{split_data[i]}")
+        for num, item in enumerate(split_data):
+            if num % 3 == 0 and num != 0 and len(data) > 38:
+                new_str.append(f"\n{item}")
             else:
-                new_str.append(split_data[i])
+                new_str.append(item)
         return ",".join(new_str)
 
 
 class StatController:
+    """Controller for all statistic class"""
+
     def __init__(self, view, model):
         self.view = view
         self.model = model
@@ -163,13 +171,16 @@ class StatController:
     def get_statistic(self, column: str):
         """Get statistic dict from model"""
         data = self.model.stats(column)
-        self.view.current_menu.database.configure(text=f"Mean = {data['mean']}\nMedian = {data['median']}"
-                                                       f"\nS.D. = {data['sd']}\nMin = {data['min']}"
-                                                       f"\nMax = {data['max']}\nVariance = {data['var']}"
-                                                       f"\nTypes of Data = {data['type']}")
+        (self.view.current_menu.database
+         .configure(text=f"Mean = {data['mean']}\nMedian = {data['median']}"
+                         f"\nS.D. = {data['sd']}\nMin = {data['min']}"
+                         f"\nMax = {data['max']}\nVariance = {data['var']}"
+                         f"\nTypes of Data = {data['type']}"))
 
 
 class ForumController:
+    """Controller for Forum class"""
+
     def __init__(self, view, model):
         self.view = view
         self.model = model
@@ -177,20 +188,24 @@ class ForumController:
     def create_new_post(self, post_title: str, master, event):
         """Use for create new forum post"""
         if not post_title:
-            CTkMessagebox(title="Error", message="Please input something for your post title.", icon="cancel")
+            CTkMessagebox(title="Error",
+                          message="Please input something for your post title."
+                          , icon="cancel")
         else:
             self.view.current_menu.user_entry.delete(0, tk.END)
             update = self.model.new_post(post_title)
 
             if not update:
-                CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+                CTkMessagebox(title="Error",
+                              message="Please close csv file that you are opening.", icon="cancel")
             else:
                 forum_data_dict = self.model.show_post()
 
                 new_frame = tk.CTkFrame(master.post_frame)
                 new_frame.columnconfigure(0, weight=1)
                 button = tk.CTkButton(new_frame, text=forum_data_dict[-1]["Title"], anchor="w",
-                                      command=lambda data=forum_data_dict[-1]: self.select_forum(data))
+                                      command=lambda data=forum_data_dict[-1]:
+                                      self.select_forum(data))
 
                 user_label = tk.CTkLabel(new_frame, text=f"-{forum_data_dict[-1]['Name']}-")
                 button.grid(column=0, columnspan=10, sticky="new")
@@ -230,50 +245,64 @@ class ForumController:
                 update = True
                 break
         if not update:
-            key = [i for i in data.keys()]
+            key = list(data.keys())
             try:
                 data.update(
-                    {f"com_{int(key[-1][-1]) + 1}": comment, f"user_{int(key[-1][-1]) + 1}": self.model.user})
-                list_of_data = [f"com_{int(key[-1][-1])}", f"user_{int(key[-1][-1])}", [comment, self.model.user]]
+                    {f"com_{int(key[-1][-1]) + 1}": comment,
+                     f"user_{int(key[-1][-1]) + 1}": self.model.user})
+
+                list_of_data = [f"com_{int(key[-1][-1])}",
+                                f"user_{int(key[-1][-1])}",
+                                [comment, self.model.user]]
             except ValueError:
                 data.update({"com_0": comment, "user_0": self.model.user})
                 list_of_data = ["com_0", "user_0", [comment, self.model.user]]
 
         success = self.model.update_csv("forum", data, list_of_data)
         if not success:
-            CTkMessagebox(title="Error", message="Please close csv file that you are opening.", icon="cancel")
+            CTkMessagebox(title="Error",
+                          message="Please close csv file that you are opening.",
+                          icon="cancel")
         else:
-            current_comment = list(data.values())[2:]
-            user_name = []
-            user_comment = []
-            for i in range(len(current_comment)):
-                if i % 2 == 0:
-                    user_comment.append(current_comment[i])
-                else:
-                    user_name.append(current_comment[i])
+            self.push_new_comment(data)
 
-            for comment in range(len(user_comment)):
-                comment_frame = tk.CTkFrame(self.view.current_menu.frame_for_comment)
+    def push_new_comment(self, the_data):
+        """Display new comment that user currently sent"""
+        current_comment = list(the_data.values())[2:]
+        user_name = []
+        user_comment = []
+        for i, new_data in enumerate(current_comment):
+            if i % 2 == 0:
+                user_comment.append(new_data)
+            else:
+                user_name.append(new_data)
 
-                if comment == "waiting-for-user-to-comment":
-                    break
-                elif (user_name[comment], user_comment[comment]) in self.view.current_menu.track_comment:
-                    continue
-                else:
-                    who_comment = tk.CTkLabel(comment_frame, text=f"{user_name[comment]} :", font=("Arial", 18))
-                    who_comment.pack(side="left", padx=10)
+        for put_comment in range(len(user_comment)):
+            comment_frame = tk.CTkFrame(self.view.current_menu.frame_for_comment)
 
-                    if len(user_comment[comment]) > 170:
-                        spaced_com = self.fix_toolong_text(user_comment[comment], 170)
-                    else:
-                        spaced_com = user_comment[comment]
-
-                    add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=("Arial", 16))
-                    add_comment.pack(side="left", padx=10)
-
-                comment_frame.pack(side="top", expand=True, anchor="w", pady=5)
-                self.view.current_menu.track_comment.append((user_name[comment], user_comment[comment]))
+            if put_comment == "waiting-for-user-to-comment":
                 break
+            if ((user_name[put_comment], user_comment[put_comment])
+                    in self.view.current_menu.track_comment):
+                continue
+
+            who_comment = tk.CTkLabel(comment_frame,
+                                      text=f"{user_name[put_comment]} :",
+                                      font=("Arial", 18))
+            who_comment.pack(side="left", padx=10)
+
+            if len(user_comment[put_comment]) > 170:
+                spaced_com = self.fix_toolong_text(user_comment[put_comment], 170)
+            else:
+                spaced_com = user_comment[put_comment]
+
+            add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=("Arial", 16))
+            add_comment.pack(side="left", padx=10)
+
+            comment_frame.pack(side="top", expand=True, anchor="w", pady=5)
+            self.view.current_menu.track_comment.append((user_name[put_comment],
+                                                         user_comment[put_comment]))
+            break
 
     @staticmethod
     def fix_toolong_text(data: str, space: int):
@@ -284,6 +313,8 @@ class ForumController:
 
 
 class CreditController:
+    """Controller for Credit class"""
+
     def __init__(self, view, model):
         self.view = view
         self.model = model

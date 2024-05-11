@@ -1,12 +1,14 @@
+"""MVC model class"""
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from PIL import Image
 
 
 class Model:
+    """This class use for store database and calculation"""
+
     def __init__(self):
         self.df = pd.read_csv('backloggd_games.csv')
         self.password = pd.read_csv('user_password.csv')
@@ -17,6 +19,7 @@ class Model:
         self.string_to_number()
 
     def game_title(self):
+        """send all of the game title to GameData class"""
         return self.df["Title"].values.tolist()
 
     def new_post(self, title: str):
@@ -50,8 +53,7 @@ class Model:
             who = self.password[self.password['Username'] == user]
             if who.empty:
                 return False
-            else:
-                return password in str(who['Password'].iloc[0])
+            return password in str(who['Password'].iloc[0])
 
         except ValueError:
             return False
@@ -61,11 +63,12 @@ class Model:
         if csv_name == "pass":
             try:
                 if self.password[self.password["Username"] == value["Username"]].empty:
-                    self.password._append(value, ignore_index=True).to_csv('user_password.csv', index=False)
+                    (self.password._append(value, ignore_index=True)
+                     .to_csv('user_password.csv', index=False))
+
                     self.password = pd.read_csv('user_password.csv')
                     return True
-                else:
-                    return "exist"
+                return "exist"
 
             except PermissionError:
                 return False
@@ -73,7 +76,8 @@ class Model:
             try:
                 self.forum_data = pd.read_csv('forum.csv')
                 if len(value) != len(self.forum_data.columns):
-                    handle_error_list = ["waiting-for-user-to-comment" for _ in range(len(self.forum_data))]
+                    handle_error_list = ["waiting-for-user-to-comment"
+                                         for _ in range(len(self.forum_data))]
                     if self.forum_data.columns[-1] == "Name":
                         self.forum_data["com_0"] = handle_error_list
                         self.forum_data["user_0"] = handle_error_list
@@ -81,8 +85,10 @@ class Model:
                     else:
                         self.forum_data[value2[0]] = handle_error_list
                         self.forum_data[value2[1]] = handle_error_list
-                self.forum_data.loc[self.forum_data["Title"] == value["Title"], value2[0]] = value2[2][0]
-                self.forum_data.loc[self.forum_data["Title"] == value["Title"], value2[1]] = value2[2][1]
+                self.forum_data.loc[self.forum_data["Title"] == value["Title"],
+                                    value2[0]] = value2[2][0]
+                self.forum_data.loc[self.forum_data["Title"] == value["Title"],
+                                    value2[1]] = value2[2][1]
 
                 self.forum_data.to_csv('forum.csv', index=False)
                 self.forum_data = pd.read_csv('forum.csv')
@@ -106,9 +112,13 @@ class Model:
 
     def stats(self, column):
         """Send statistic datas to controller"""
-        return {"mean": round(self.df[column].mean(), 3), "median": round(self.df[column].median(), 3),
-                "sd": round(self.df[column].std(), 3), "type": self.df[column].dtypes,
-                "min": self.df[column].min(), "max": self.df[column].max(), "var": round(self.df[column].var(), 3)}
+        return {"mean": round(self.df[column].mean(), 3),
+                "median": round(self.df[column].median(), 3),
+                "sd": round(self.df[column].std(), 3),
+                "type": self.df[column].dtypes,
+                "min": self.df[column].min(),
+                "max": self.df[column].max(),
+                "var": round(self.df[column].var(), 3)}
 
     def find_game_data(self, name_of_the_game):
         """Send datas of the game to controller"""
@@ -124,7 +134,7 @@ class Model:
         """Create a graph from x and y that user select for UserGraph class"""
         # plot the data
         figure = Figure(figsize=(4, 4))
-        ax = figure.subplots()
+        ax = figure.add_subplot(111)
 
         if x == "empty_x" and y == "empty_y":
             empty_df = pd.DataFrame()

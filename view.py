@@ -1,3 +1,4 @@
+"""This module is MVC view class it is use for show GUI to user"""
 from PIL import Image
 import customtkinter as tk
 
@@ -28,7 +29,7 @@ class View:
         """Initialize of View class"""
         self.app = App()
 
-        self.app.protocol("WM_DELETE_WINDOW", lambda: self.app.closing_the_program())
+        self.app.protocol("WM_DELETE_WINDOW", self.app.closing_the_program())
         self.controller = None
         self.menu = {"login": Login, "game": GameData, "stat": StatisticData,
                      "forum": Forum, "credit": Credit, "up": SignUp, "UserForum": SelectedForum,
@@ -82,7 +83,8 @@ class View:
                                        fg_color="transparent", font=FONT, text_color="white")
         self.title_label.pack(side="left", padx=100, pady=3, expand=True)
 
-        self.dark_mode = tk.CTkSwitch(master=menu_label, text="Dark Mode", font=FONT, text_color="white")
+        self.dark_mode = tk.CTkSwitch(master=menu_label, text="Dark Mode",
+                                      font=FONT, text_color="white")
         self.dark_mode.select()
         self.dark_mode.pack(side="left", expand=True)
 
@@ -92,7 +94,8 @@ class View:
 
     def menu_window_creation(self):
         """When user click at menu. Menu window will pop up on the left side"""
-        button_option = {'font': ('Arial', 13), 'fg_color': "transparent", 'text_color': ("black", "white")}
+        button_option = {'font': ('Arial', 13), 'fg_color': "transparent",
+                         'text_color': ("black", "white")}
         option = {'pady': 20, 'fill': "both", 'expand': True}
 
         self.menu_window = tk.CTkFrame(self.app, fg_color=("#e8e8e8", "#252525"))
@@ -150,15 +153,15 @@ class Login(tk.CTkFrame):
         # Username Label and Entry
         user_label = tk.CTkLabel(self.__data_frame, text="Username", font=FONT)
         user_label.grid(row=0, column=0, sticky="sw", padx=15)
-        user_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your username....", font=FONT,
-                                 width=200)
+        user_entry = tk.CTkEntry(self.__data_frame, font=FONT, width=200
+                                 , placeholder_text="Type your username....")
         user_entry.grid(row=1, column=0, sticky="new", padx=15, columnspan=3)
 
         # Password Label and Entry
         pass_label = tk.CTkLabel(self.__data_frame, text="Password", font=FONT)
         pass_label.grid(row=1, column=0, sticky="sw", padx=15)
-        pass_entry = tk.CTkEntry(self.__data_frame, placeholder_text="Type your password....", font=FONT,
-                                 width=200)
+        pass_entry = tk.CTkEntry(self.__data_frame, font=FONT, width=200
+                                 , placeholder_text="Type your password....")
         pass_entry.grid(row=2, column=0, sticky="new", padx=15, columnspan=3)
 
         # Signup and Sign in Button
@@ -168,9 +171,11 @@ class Login(tk.CTkFrame):
         login_button.grid(row=3, column=1, sticky="n")
 
         # Bind Button
-        signup_button.bind("<Button-1>", lambda event=None: self.controller.signup(self.app, event))
-        login_button.bind("<Button-1>", lambda event=None: self.controller.signin(user_entry.get(),
-                                                                                  pass_entry.get(), event))
+        signup_button.bind("<Button-1>",
+                           lambda event=None: self.controller.signup(self.app, event))
+        login_button.bind("<Button-1>",
+                          lambda event=None: self.controller.signin(user_entry.get(),
+                                                                    pass_entry.get(), event))
         # Left Frame grid and configure
         self.__left_frame.grid(row=0, column=0, sticky="news")
         self.__left_frame.columnconfigure(0, weight=1)
@@ -196,6 +201,8 @@ class Login(tk.CTkFrame):
 
 
 class SignUp(tk.CTkToplevel):
+    """When user click sign up button user will lead to this class"""
+
     def __init__(self, master, controller, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.app = master
@@ -233,8 +240,10 @@ class SignUp(tk.CTkToplevel):
         signup_button.grid(row=2, column=2, sticky="s")
 
         # Bind Button
-        signup_button.bind("<Button-1>", lambda event=None: self.controller.add_new_people(user_entry.get(),
-                                                                                           pass_entry.get()))
+        signup_button.bind("<Button-1>",
+                           lambda event=None:
+                           self.controller.add_new_people(user_entry.get(),
+                                                          pass_entry.get()))
 
         for i in range(4):
             sign_up_frame.rowconfigure(i, weight=1)
@@ -347,16 +356,23 @@ class StatisticData(tk.CTkFrame):
         middle_label.grid(row=3, column=1, sticky="n")
 
         # distribution graph (user can create graph in this menu)
-        distribution_button = tk.CTkButton(self, text="", image=distribute_image, fg_color="transparent")
+        distribution_button = tk.CTkButton(self, text="",
+                                           image=distribute_image, fg_color="transparent")
         distribution_button.grid(row=2, column=2)
 
         # label for left button
         right_label = tk.CTkLabel(self, text="Create Your Graph", font=('Arial', 18, 'bold'))
         right_label.grid(row=3, column=2, sticky="n")
 
-        story_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("story"))
-        stat_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("statistic"))
-        distribution_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("distribute"))
+        story_button.bind("<Button-1>",
+                          lambda event=None:
+                          self.controller.change_statistic_menu("story"))
+        stat_button.bind("<Button-1>",
+                         lambda event=None:
+                         self.controller.change_statistic_menu("statistic"))
+        distribution_button.bind("<Button-1>",
+                                 lambda event=None:
+                                 self.controller.change_statistic_menu("distribute"))
 
 
 class StatisticMenu(tk.CTkFrame):
@@ -393,15 +409,18 @@ class StatisticMenu(tk.CTkFrame):
         dataframe = tk.CTkFrame(self, fg_color=("#a5a5a5", "#2d2d2d"))
         dataframe.grid(row=1, column=1, sticky="news")
 
-        self.database = tk.CTkLabel(dataframe, text="Mean = None\nMedian = None\nS.D. = None\nMin = None"
-                                                    "\nMax = None\nVariance = None\nType of Data = None",
+        self.database = tk.CTkLabel(dataframe,
+                                    text="Mean = None\nMedian = None\nS.D. = None\nMin = None"
+                                         "\nMax = None\nVariance = None\nType of Data = None",
                                     font=("Arial", 25))
         self.database.pack(pady=20)
 
         back_button = tk.CTkButton(self, text="Back")
         back_button.grid(row=2, column=1)
 
-        back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
+        back_button.bind("<Button-1>",
+                         lambda event=None:
+                         self.controller.change_statistic_menu("stat"))
 
 
 class StoryTelling(tk.CTkFrame):
@@ -422,18 +441,21 @@ class StoryTelling(tk.CTkFrame):
         top_frame.pack(pady=10, expand=True)
 
         select_graph = tk.CTkComboBox(top_frame,
-                                      values=["Rating and Plays", "Rating and Genres", "Avg Rating Per Decade",
+                                      values=["Rating and Plays", "Rating and Genres",
+                                              "Avg Rating Per Decade",
                                               "Top 20 Platforms Based on Rating and Popularity"])
         select_graph.pack(side="left", expand=True)
         self.graph.pack(pady=10, expand=True)
 
         create_button = tk.CTkButton(top_frame, text="Create Graph")
         create_button.pack(side="left", padx=5, expand=True)
-        create_button.bind("<Button-1>", lambda event=None: self.controller.story_graph(select_graph.get()))
+        create_button.bind("<Button-1>",
+                           lambda event=None: self.controller.story_graph(select_graph.get()))
 
         back_button = tk.CTkButton(self, text="Back")
         back_button.pack(pady=5, expand=True)
-        back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
+        back_button.bind("<Button-1>",
+                         lambda event=None: self.controller.change_statistic_menu("stat"))
 
 
 class UserGraph(tk.CTkFrame):
@@ -465,15 +487,17 @@ class UserGraph(tk.CTkFrame):
         label_x = tk.CTkLabel(attribute_frame, text="x:", font=FONT)
         label_x.pack(**option)
 
-        select_x = tk.CTkComboBox(attribute_frame, values=["Rating", "Plays", "Playing",
-                                                           "Backlogs", "Wishlist", "Lists", "Reviews"])
+        select_x = tk.CTkComboBox(attribute_frame,
+                                  values=["Rating", "Plays", "Playing",
+                                          "Backlogs", "Wishlist", "Lists", "Reviews"])
         select_x.pack(**option)
 
         label_y = tk.CTkLabel(attribute_frame, text="y:", font=FONT)
         label_y.pack(**option)
 
-        select_y = tk.CTkComboBox(attribute_frame, values=["Rating", "Plays", "Playing", "Backlogs",
-                                                           "Wishlist", "Lists", "Reviews"])
+        select_y = tk.CTkComboBox(attribute_frame,
+                                  values=["Rating", "Plays", "Playing", "Backlogs",
+                                          "Wishlist", "Lists", "Reviews"])
         select_y.pack(**option)
 
         start_button = tk.CTkButton(attribute_frame, text="Create Graph")
@@ -485,10 +509,12 @@ class UserGraph(tk.CTkFrame):
         attribute_frame.grid(row=0, column=3, sticky="we")
         self.frame.grid(row=2, column=3, sticky="ns")
 
-        back_button.bind("<Button-1>", lambda event=None: self.controller.change_statistic_menu("stat"))
+        back_button.bind("<Button-1>",
+                         lambda event=None: self.controller.change_statistic_menu("stat"))
         start_button.bind("<Button-1>",
-                          lambda event=None: self.controller.user_select_graph(self.frame, select_x.get(),
-                                                                               select_y.get()))
+                          lambda event=None:
+                          self.controller.user_select_graph(self.frame,
+                                                            select_x.get(), select_y.get()))
 
 
 class Forum(tk.CTkFrame):
@@ -525,11 +551,14 @@ class Forum(tk.CTkFrame):
         new_post.pack(side="left", padx=10)
 
         self.post_frame.grid(row=1, column=1, sticky="news")
-        new_post.bind("<Button-1>", lambda event=None: self.controller.create_new_post(self.user_entry.get(),
-                                                                                       self, event))
+        new_post.bind("<Button-1>",
+                      lambda event=None: self.controller.create_new_post(self.user_entry.get(),
+                                                                         self, event))
 
 
 class SelectedForum(tk.CTkFrame):
+    """When user selected forum program will change to this class"""
+
     def __init__(self, master, controller, data, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title = "Selected Forum"
@@ -573,11 +602,11 @@ class SelectedForum(tk.CTkFrame):
 
         user_name = []
         user_comment = []
-        for i in range(len(self.list_data)):
+        for i, data in enumerate(self.list_data):
             if i % 2 == 0:
-                user_comment.append(self.list_data[i])
+                user_comment.append(data)
             else:
-                user_name.append(self.list_data[i])
+                user_name.append(data)
 
         for comment in range(len(user_name)):
             comment_frame = tk.CTkFrame(self.frame_for_comment)
@@ -587,20 +616,21 @@ class SelectedForum(tk.CTkFrame):
 
             if user_comment[comment] == "waiting-for-user-to-comment":
                 break
+
+            who_comment = tk.CTkLabel(comment_frame,
+                                      text=f"{user_name[comment]} :", font=("Arial", 18))
+            who_comment.pack(side="left", padx=10)
+
+            if len(user_comment[comment]) > 170:
+                spaced_com = self.controller.fix_toolong_text(user_comment[comment], 170)
             else:
-                who_comment = tk.CTkLabel(comment_frame, text=f"{user_name[comment]} :", font=("Arial", 18))
-                who_comment.pack(side="left", padx=10)
+                spaced_com = user_comment[comment]
 
-                if len(user_comment[comment]) > 170:
-                    spaced_com = self.controller.fix_toolong_text(user_comment[comment], 170)
-                else:
-                    spaced_com = user_comment[comment]
+            add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=FONT)
+            add_comment.pack(side="left", padx=10)
 
-                add_comment = tk.CTkLabel(comment_frame, text=spaced_com, font=FONT)
-                add_comment.pack(side="left", padx=10)
-
-                self.track_comment.append((user_name[comment], user_comment[comment]))
-                comment_frame.pack(side="top", expand=True, anchor="w")
+            self.track_comment.append((user_name[comment], user_comment[comment]))
+            comment_frame.pack(side="top", expand=True, anchor="w")
 
         self.new_comment_text.grid(row=2, sticky="news", column=0, pady=5)
 
