@@ -327,6 +327,7 @@ class CreditController:
         """display credit text for Credit class"""
         return self.model.credit
 
-    def fix_pylint(self):
+    @staticmethod
+    def fix_pylint():
         """use less function"""
         return "This is public method."
