@@ -1,5 +1,6 @@
 """This module is MVC view class it is use for show GUI to user"""
 from PIL import Image
+from cryptography.fernet import Fernet
 import customtkinter as tk
 
 FONT = ("Arial", 16)
@@ -11,6 +12,11 @@ class App(tk.CTk):
 
     def __init__(self):
         super().__init__()
+        with open('everyone_key.key', 'rb') as mykey:
+            self.key = mykey.read()
+        self.fernet = Fernet(self.key)
+        # self.decrypt_data()
+
         self.title("The Game Rating Predictor: A Star Seeker's Guide")
         self.geometry("800x500")
         tk.set_appearance_mode("dark")
@@ -19,7 +25,27 @@ class App(tk.CTk):
         """When user click at X symbol on the top left destroy everything
         or click at exit button
         """
+        # self.encrypt_data()
         self.tk.quit()
+
+    # def decrypt_data(self):
+    #     """Decrypt password csv that is currently encrypted"""
+    #     with open('user_password.csv', 'rb') as encrypted_file:
+    #         encrypted = encrypted_file.read()
+    #
+    #     decrypted = self.fernet.decrypt(encrypted)
+    #
+    #     with open('user_password.csv', 'wb') as decrypted_file:
+    #         decrypted_file.write(decrypted)
+    #
+    # def encrypt_data(self):
+    #     """Encrypt password csv before leaving"""
+    #     with open('user_password.csv', 'rb') as decrypt_data:
+    #         decrypt = decrypt_data.read()
+    #
+    #     encrypted = self.fernet.encrypt(decrypt)
+    #     with open('user_password.csv', 'wb') as encrypted_file:
+    #         encrypted_file.write(encrypted)
 
 
 class View:
@@ -116,7 +142,7 @@ class View:
         # Bind Button
         game_button.bind("<Button-1>", lambda event: self.controller.menu_button("game"))
         stat_button.bind("<Button-1>", lambda event: self.controller.menu_button("stat"))
-        forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum",))
+        forum_button.bind("<Button-1>", lambda event: self.controller.menu_button("forum", ))
         credit_button.bind("<Button-1>", lambda event: self.controller.menu_button("credit"))
 
     def main_loop(self):
@@ -205,7 +231,7 @@ class Login(tk.CTkFrame):
         tk.CTkLabel(self.announce,
                     text="If you are a new user you should Sign up first.\n"
                          " But, if you don't want to Sign Up you can "
-                         "use \n\nUsername: Guest \nPassword: Guest \n\n"
+                         "use \n\nUsername: Guest \nPassword: 1234 \n\n"
                          "to sign in.\n However, if you use a Guest ID "
                          "you can't"
                          "comment or create a new forum.").pack()
@@ -347,8 +373,9 @@ class StatisticData(tk.CTkFrame):
             self.columnconfigure(i, weight=1)
 
         # image to use in button
-        distribute_image = tk.CTkImage(light_image=Image.open("img/dis.png"), size=(200, 200))
-        storytelling_image = tk.CTkImage(light_image=Image.open("img/scat.png"), size=(200, 200))
+        distribute_image = tk.CTkImage(light_image=Image.open("img/dis2.png"), size=(200, 200))
+        stat_image = tk.CTkImage(light_image=Image.open("img/scat.png"), size=(200, 200))
+        storytelling_image = tk.CTkImage(light_image=Image.open("img/dis.png"), size=(200, 200))
 
         # data story telling graph
         story_button = tk.CTkButton(self, text="", image=storytelling_image, fg_color="transparent")
@@ -359,7 +386,7 @@ class StatisticData(tk.CTkFrame):
         left_label.grid(row=3, column=0, sticky="n")
 
         # statistic menu use for show mean median max
-        stat_button = tk.CTkButton(self, text="", image=distribute_image, fg_color="transparent")
+        stat_button = tk.CTkButton(self, text="", image=stat_image, fg_color="transparent")
         stat_button.grid(row=2, column=1)
 
         # label for middle button
